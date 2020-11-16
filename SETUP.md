@@ -60,6 +60,12 @@ TODO: script this step.
 
 ### Configure Toolkit
 
+- Update Console Link for Git to point to gogs url
+```
+GOGS_CONSOLE_UR=$(oc get route -n tools gogs --template='https://{{.spec.host}}')
+oc patch consolelink toolkit-sourcecontrol --type merge -p '{"spec":{"href":"$GOGS_CONSOLE_UR"}}'
+```
+
 - Configure tools namespace with gitops-cd-secret in the tools namespace
 ```bash
 oc delete secret -n tools gitops-cd-secret || true
