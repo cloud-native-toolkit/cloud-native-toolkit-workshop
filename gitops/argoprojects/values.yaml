@@ -1,0 +1,136 @@
+global: {}
+
+argocd-config:
+  repoUrl: "http://gogs.tools:3000/toolkit/gitops.git"
+
+  project: toolkit
+
+  applicationTargets:
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user1-qa
+      applications:
+        - name: user1-app
+          path: user1/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user2-qa
+      applications:
+        - name: user2-app
+          path: user2/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user3-qa
+      applications:
+        - name: user3-app
+          path: user3/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user4-qa
+      applications:
+        - name: user4-app
+          path: user4/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user5-qa
+      applications:
+        - name: user5-app
+          path: user5/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user6-qa
+      applications:
+        - name: user6-app
+          path: user6/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user7-qa
+      applications:
+        - name: user7-app
+          path: user7/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user8-qa
+      applications:
+        - name: user8-app
+          path: user8/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user9-qa
+      applications:
+        - name: user9-app
+          path: user9/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user10-qa
+      applications:
+        - name: user10-app
+          path: user10/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user11-qa
+      applications:
+        - name: user11-app
+          path: user11/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user12-qa
+      applications:
+        - name: user12-app
+          path: user12/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user13-qa
+      applications:
+        - name: user13-app
+          path: user13/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user14-qa
+      applications:
+        - name: user14-app
+          path: user14/app
+          type: helm
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user15-qa
+      applications:
+        - name: user15-app
+          path: user15/app
+          type: helm
+
+    # - targetRevision: ""
+    #   targetNamespace: ""
+    #   createNamespace: true
+    #   server: "" (optional)
+    #   valueFiles: (optional)
+    #   - values.yaml
+    #   applications:
+    #   - app1
+    #   - name: app1
+    #   - name: app1
+    #     type: helm
+    #   - name: app1
+    #     type: helm
+    #     path: app1
+    #   - name: app2
+    #     type: directory
+    #   - name: app3
+    #     type: plugin
+    #     plugin: plugin-name
+    #   - name: app4
+    #     type: kustomize
+    #     path: app4/overlay
