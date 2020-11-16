@@ -44,7 +44,7 @@ TODO: script this step.
 If you are using a cluster with valid ssl certs for apps, the use `--param=PROTOCOL=https` if using cluster that uses self-sign certs like crc then don't pass this parameter to use `http` for the git server.
 
 ```bash
-oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-template-ephemeral.yaml --param=HOSTNAME=gogs-tools.$(oc get ingresses.config.openshift.io cluster -o template={{.spec.domain}}) -n tools
+oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-template.yaml --param=HOSTNAME=gogs-tools.$(oc get ingresses.config.openshift.io cluster -o template={{.spec.domain}}) -n tools
 ```
 
 If using `https` above, then edit the Route in the `tools` namespace to configure the Route to use tls edge termination.
@@ -83,7 +83,7 @@ project: default
 sync: Auto
 git: http://gogs.tools:3000/toolkit/gitops.git
 revision: master
-path: /
+path: /argoprojects
 values: values.yaml
 ```
 
