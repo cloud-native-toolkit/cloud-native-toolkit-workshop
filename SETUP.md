@@ -131,6 +131,12 @@ values: values.yaml
 
 ### Customize Dashboard
 
+Update starter Kits to point to Gogs, update [dashboard/lnks.json](dashboard/lnks.json)
 
-
+```bash
 oc patch cm ibmcloud-config -n tools --type merge -p "{\"data\": {\"LINKS_URL\": \"https://raw.githubusercontent.com/ibm-garage-cloud/cloud-native-toolkit-workshops/main/dashboard/links.json\"}}"
+
+oc scale deployment dashboard-developer-dashboard --replicas 0 -n tools
+
+oc scale deployment dashboard-developer-dashboard --replicas 1 -n tools
+```
