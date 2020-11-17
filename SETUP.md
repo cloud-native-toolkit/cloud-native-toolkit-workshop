@@ -80,33 +80,41 @@ Register a new user `toolkit` with password `toolkit`
 ### Configure Toolkit
 
 - Update Console Link for Git to point to gogs url
-```
-GOGS_CONSOLE_URL=$(oc get route -n tools gogs --template='https://{{.spec.host}}')
-oc patch consolelink toolkit-sourcecontrol --type merge -p "{\"spec\": {\"href\": \"$GOGS_CONSOLE_URL\"}}"
-```
+    ```
+    GOGS_CONSOLE_URL=$(oc get route -n tools gogs --template='https://{{.spec.host}}')
+    oc patch consolelink toolkit-sourcecontrol --type merge -p "{\"spec\": {\"href\": \"$GOGS_CONSOLE_URL\"}}"
+    ```
 
 - Configure tools namespace with gitops-cd-secret in the tools namespace
-```bash
-oc delete secret -n tools gitops-cd-secret || true
+    ```bash
+    NAMESPACE=tools
 
-oc create secret -n tools generic gitops-cd-secret \
---from-literal username=toolkit \
---from-literal password=toolkit
+    oc delete secret gitops-cd-secret -n ${NAMESPACE} || true
 
-oc label secret -n tools gitops-cd-secret group=catalyst-tools
-```
-- Configure tools namespace with `gitops-repo` configMap
-```
-oc delete cm -m tools gitops-repo || true
+    oc create secret -n tools generic gitops-cd-secret \
+    --from-literal username=toolkit \
+    --from-literal password=toolkit \
+    -n ${NAMESPACE}
 
-oc create -n tools cm gitops-repo \
---from-literal parentdir="bash -c 'basename ${NAMESPACE} -dev'" \
---from-literal host=$(oc get route -n tools gogs --template='{{.spec.host}}') \
---from-literal branch=qa \
---from-literal org=toolkit
 
-oc label cm gitops-repo -n tools gitops-cd-secret group=catalyst-tools
-```
+    oc label secret gitops-cd-secret group=catalyst-tools -n ${NAMESPACE}
+    ```
+
+- Configure `tools` namespace with `gitops-repo` configMap
+    ```bash
+    NAMESPACE=tools
+
+    oc delete cm gitops-repo -n ${NAMESPACE} || true
+
+    oc create cm gitops-repo \
+    --from-literal parentdir="bash -c 'basename ${NAMESPACE} -dev'" \
+    --from-literal host=$(oc get route -n tools gogs --template='{{.spec.host}}') \
+    --from-literal branch=qa \
+    --from-literal org=toolkit \
+    -n ${NAMESPACE}
+
+    oc label cm gitops-repo group=catalyst-tools -n ${NAMESPACE}
+    ```
 
 - Configure ArgoCD
 Login into ArgoCD and create an application
