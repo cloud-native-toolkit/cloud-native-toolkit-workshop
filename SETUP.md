@@ -44,7 +44,7 @@ TODO: script this step.
 If you are using a cluster with valid ssl certs for apps, the use `--param=PROTOCOL=https` if using cluster that uses self-sign certs like crc then don't pass this parameter to use `http` for the git server.
 
 ```bash
-oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-template.yaml --param=HOSTNAME=gogs-tools.$(oc get ingresses.config.openshift.io cluster -o template={{.spec.domain}}) -n tools --param=PROTOCOL=https
+oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-template.yaml --param=PROTOCOL=https --param=HOSTNAME=gogs-tools.$(oc get ingresses.config.openshift.io cluster -o template={{.spec.domain}}) -n tools
 ```
 
 If using `https` above, then edit the Route in the `tools` namespace to configure the Route to use tls edge termination.
@@ -62,15 +62,20 @@ Register a new user `toolkit` with password `toolkit`
 
 ### Configure Git Server
 
-TODO: script this step.
 - Create new repo with name `gitops` under the account `toolkit` make it a public git repo. Then run the following scripts to create the branches `master`, `qa ` and `staging`
     ```
     GIT_PROTOCOL=https GIT_HOST=$(oc get route -n tools gogs --template='{{.spec.host}}') \
     ./scripts/01-git-gitops.sh
     ```
-- Create new migration repo with name `app` from git url `TODO` provided url, under the account `toolkit` leave default public and no mirror.
+- Create new migration repo using one of the templates below, and  name the repository `app`, leave it public.
+    - https://github.com/IBM/template-go-gin
+    - https://github.com/IBM/template-node-typescript
+    - https://github.com/IBM/template-java-spring
 
 - Create user accounts (ie user1:user1, user2:user2) or allow users to register in git server.
+    ```
+    GIT_PROTOCOL=https GIT_HOST=$(oc get route -n tools gogs --template='{{.spec.host}}') ./scripts/02-git-users.sh
+    ```
 
 ### Configure Toolkit
 
