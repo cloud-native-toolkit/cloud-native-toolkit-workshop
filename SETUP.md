@@ -129,4 +129,8 @@ path: /argoprojects
 values: values.yaml
 ```
 
+### Customize Dashboard
 
+
+
+oc patch cm ibmcloud-config -n tools --type merge -p "{\"data\": {\"LINKS_URL\": \"https://raw.githubusercontent.com/ibm-garage-cloud/cloud-native-toolkit-workshops/main/dashboard/links.json\"}}"
