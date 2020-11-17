@@ -107,10 +107,11 @@ Register a new user `toolkit` with password `toolkit`
     oc delete cm gitops-repo -n ${NAMESPACE} || true
 
     oc create cm gitops-repo \
-    --from-literal parentdir="bash -c 'basename ${NAMESPACE} -dev'" \
+    --from-literal parentdir="bash -c 'basename \${NAMESPACE} -dev'" \
     --from-literal host=$(oc get route -n tools gogs --template='{{.spec.host}}') \
     --from-literal branch=qa \
     --from-literal org=toolkit \
+    --from-literal repo=gitops \
     -n ${NAMESPACE}
 
     oc label cm gitops-repo group=catalyst-tools -n ${NAMESPACE}
