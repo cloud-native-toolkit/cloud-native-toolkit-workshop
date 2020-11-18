@@ -130,16 +130,16 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
     ```
 1. Login into ArgoCD and create an application with the following settings:
     ```
-    name: toolkit
-    project: default
-    sync: Auto
-    git: http://gogs.tools:3000/toolkit/gitops.git
-    revision: master
-    path: argoprojects
-    cluster: internal
-    values: values.yaml
+    Applicatio Name: toolkit
+    Project: default
+    Sync Policy: Automatic, check boxes "Prune" and "Self Heal"
+    Repository URL: http://gogs.tools:3000/toolkit/gitops.git
+    Revision: master
+    Path: argoprojects
+    Cluster: in-cluster
+    Namespace: tools
     ```
-1. Update starter Kits to point to Gogs, update [dashboard/lnks.json](dashboard/lnks.json)
+1. TODO: script this step: Update starter Kits to point to Gogs, update [dashboard/lnks.json](dashboard/lnks.json). Update the links.json with the correct hostname of gogs route, make the json file available in a public url and then run the following command
     ```bash
     oc patch cm ibmcloud-config -n tools --type merge -p "{\"data\": {\"LINKS_URL\": \"https://raw.githubusercontent.com/ibm-garage-cloud/cloud-native-toolkit-workshops/main/dashboard/links.json\"}}"
 
