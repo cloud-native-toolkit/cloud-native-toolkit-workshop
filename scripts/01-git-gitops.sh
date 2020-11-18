@@ -25,17 +25,17 @@ git commit -m "first commit"
 git remote add origin ${GIT_URL}
 git push -u origin master
 
-git checkout --orphan qa
-echo "This is the qa environment" > README.md
-git add README.md
-git commit -am "first commit for qa"
-git push origin qa
-
 git checkout --orphan staging
 echo "This is the staging environment" > README.md
 git add README.md
-git commit -am "first commit for staging"
+git commit -m "first commit for staging"
 git push origin staging
+
+git checkout -b qa
+echo "This is the qa environment" > README.md
+git add README.md
+git commit -m "first commit for qa"
+git push origin qa
 
 popd
 
