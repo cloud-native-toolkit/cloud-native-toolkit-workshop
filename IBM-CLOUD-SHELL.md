@@ -5,7 +5,7 @@
 Use the IBM Cloud Shell
 
 1. Login into the [IBM Cloud Shell](https://cloud.ibm.com/shell)
-1. Verify `oc` CLI is version 4.5+
+1. Verify `oc` CLI 
     ```bash
     oc version --client
     ```
