@@ -44,11 +44,11 @@
     oc pipeline
     ```
     - Select `Tekton`
-    - Enter username
-    - Enter password as token
+    - Enter `userx` as username
+    - Enter `userx` as token/password
     - Hit Enter to select branch `master`
     - Use down arrow and select `ibm-golang`
-    - Hit Enter to select image scanning
+    - Hit Enter to select  Y for image scanning
 
 - Open the OpenShift console and login
     ```
