@@ -104,6 +104,7 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
     --from-literal branch=qa \
     --from-literal org=toolkit \
     --from-literal repo=gitops \
+    --from-literal protocol=http \
     -n ${NAMESPACE}
 
     oc label cm gitops-repo group=catalyst-tools -n ${NAMESPACE}
@@ -127,6 +128,10 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
 
     oc scale deployment dashboard-developer-dashboard --replicas 1 -n tools
     ```
+1. Make all users cluster-admin for now
+   ```bash
+   oc apply -f rbac/cluster-admins.yaml
+   ```
 1. Pre-create RBAC to allow namespaces in `userxx-qa` to be able to pull from `userxx-dev`
     ```bash
     oc apply -f rbac/system-image-puller.yaml

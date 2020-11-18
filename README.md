@@ -59,6 +59,8 @@
 
 - Select Pipeline from the Console and see the status of the Pipeline
 
+- WARNING: The pipeline might fail if using `https` for `git-url`, Go ahead and start the Pipeline and provide the git url using `http` instead of `https`
+
 - Select Pipeline Run
 
 - Verify that Pipeline Run completeled succesfully
