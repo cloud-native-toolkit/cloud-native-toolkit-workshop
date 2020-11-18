@@ -11,9 +11,12 @@
     - Assigned username and password for both OpenShift and Git Server
 
 - Fork application template git repo
-    1. Login into GIT Sever using the provided username and password
-    1. Fork the repository `app` from the user `toolkit`
-    1. Copy the HTTP url to the new git repository
+    - Open Developer Dashboard
+    - Select Starter Kits
+    - Select Workshop App
+    - Login into GIT Sever using the provided username and password
+    - Fork the repository `app` from the user `toolkit`
+    - Copy the HTTP url to the new git repository
 
 - Setup environment variables for the user
     ```bash
@@ -24,7 +27,7 @@
 - Clone the git repository and change directory
     ```
     git clone $GIT_URL
-    cd $GIT_URL
+    cd app
     ```
 
 - Login using provided username and password into OpenShift server using the CLI
@@ -37,10 +40,16 @@
     oc sync $USERNAME-dev --dev
     ```
 
-- Create a pipeline for the application, select `Tekton`, and select `go`, ignore the warning but copy the printed url to be use later.
+- Create a pipeline for the application
     ```
     oc pipeline
     ```
+    - Select `Tekton`
+    - Enter username
+    - Enter password as token
+    - Hit Enter to select branch `master`
+    - Use down arrow and select `ibm-golang`
+    - Hit Enter to select image scanning
 
 - Open the OpenShift console and login
     ```
@@ -51,22 +60,35 @@
 
 - Select Pipeline from the Console and see the status of the Pipeline
 
+- Select Pipeline Run
+
+- Verify that Pipeline Run completeled succesfully
+
+- Review the Pipeline Tasks/Stages
+    - Test
+    - Open SonarQube from Console Link
+    - Open PACT from Console Link
+    - Open Artifactory from Console Link
+    - Open Registry from
+
 - Select Topoly from the Console and see the application running
 
 - Open the application route url and try the application
 
-- In the Git Server open the Settings for the repository, select Webhooks, create a new webhook and use the url from the step `oc pipeline` select defaults.
+- Make a change to the application in the git repository and run the Pipeline again from the Console.
 
-- Make a change to the application in the git repository and push the changes.
+- Check the new pipeline running again.
 
-- Check the new pipeline running deploying the change.
+- Verify that App manifests are being updated in the `gitops` repo in the git account `toolkit` under the `qa` branch.
 
 - Promote the application to QA using gitops
-    ```
-    oc sync $USERNAME-qa
+    ```bash
+    oc new-project $USERNAME-qa
     ```
 
 - Select ArgoCD from the Console menu and login
+
+- Filter by namespace `$USERNAME-qa`
 
 - In ArgoCD UI select the application `qa-$USERNAME-app` in Argo and verify is OK
 
