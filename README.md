@@ -6,8 +6,6 @@
 
 - Instructor will provide the following info:
     - OpenShift Console URL (OCP_CONSOLE_URL)
-    - OpenShift Server URL (OCP_URL)
-    - Git Server URL
     - Assigned username and password for both OpenShift and Git Server
 
 - Fork application template git repo
