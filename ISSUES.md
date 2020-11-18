@@ -5,9 +5,6 @@ When using an OCP that have self-sign, when access Gogs Git server programatical
 1. `oc pipeline`
 - It hardcodes `https` when it creates tekton trigger, instead of using `http` from `git remote -v`. When using an OCP with self-sign ssl certificate first pipeline run will fail. If you configure webhook and gogs to use internal url `http://gogs.tools:3000` then the tekton tasks will use this URL. See below issue needs to be fix before this works.
 
-2. Tekton Tasks
-- Tekton Task setup `git-clone` it harcodes `https` instead getting the protocol from the param `git-url` which could be `http://gogs.tools:3000/user1/app.git`
-
 ### CLI
 
 - It creates a tekton trigger for gitlab doesn't work for gogs see issue here: https://github.com/ibm-garage-cloud/ibm-garage-cloud-cli
