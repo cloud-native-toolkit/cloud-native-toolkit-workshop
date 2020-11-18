@@ -31,6 +31,33 @@ https://developer.ibm.com/openlabs/openshift
 TODO: script this step.
 Setup user accounts for the openshift cluster using name name and password (ie user1:user1, user2:user2, etc..)
 
+```bash
+docker run --rm -it -v $PWD:/tmp/toolkit fedora bash -c 'yum install httpd-tools -y; /tmp/toolkit/scripts/03-ocp-users.sh'
+oc delete secret ibm-toolkit-htpasswd -n openshift-config || true
+oc create secret generic ibm-toolkit-htpasswd -n openshift-config --from-file=htpasswd=local/users.htpasswd
+oc get secret ibm-toolkit-htpasswd -ojsonpath={.data.htpasswd} -n openshift-config | base64 -d
+
+```
+Edit the OAuth CR
+```bash
+oc edit OAuth cluster
+```
+```yaml
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: my_htpasswd_provider
+    mappingMethod: claim
+    type: HTPasswd
+    htpasswd:
+      fileData:
+        name: ibm-toolkit-htpasswd
+```
+
+
 
 ### Install the Cloud Native Toolkit
 
@@ -47,9 +74,11 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
 ### Configure Git Server
 
 1. Login into Git Server and register as admin with username `toolkit` with password `toolkit`
-1. Create new repo with name `gitops` under the account `toolkit` make it a public git repo. Then run the following scripts to create the branches `master`, `qa ` and `staging`
+1. Create a Access Token with name `toolkit` "Your Settings"->"Applications"->"Generate New Token"
+1. Create new repo with name `gitops` under the account `toolkit` make it a public git repo and leave it empty, the next step will populate content.
+1. Run the following scripts to create the branches `master`, `qa ` and `staging`
     ```
-    GIT_PROTOCOL=https GIT_HOST=$(oc get route -n tools gogs --template='{{.spec.host}}') \
+    GIT_HOST=$(oc get route -n tools gogs --template='{{.spec.host}}') \
     ./scripts/01-git-gitops.sh
     ```
 1. Create new migration repo using one of the templates below, and  name the repository `app`, leave it public.
@@ -59,7 +88,7 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
 
 1. Create user accounts (ie user1:user1, user2:user2) or allow users to register in git server.
     ```
-    GIT_PROTOCOL=https GIT_HOST=$(oc get route -n tools gogs --template='{{.spec.host}}') ./scripts/02-git-users.sh
+    GIT_HOST=$(oc get route -n tools gogs --template='{{.spec.host}}') ./scripts/02-git-users.sh
     ```
 
 ### Configure Toolkit
@@ -121,4 +150,8 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
 1. Pre-create RBAC to allow namespaces in `userxx-qa` to be able to pull from `userxx-dev`
     ```bash
     oc apply -f rbac/system-image-puller.yaml
+    ```
+1. Add Users to ArgoCD Group
+    ```bash
+    ./scripts/04-ocp-group.sh
     ```

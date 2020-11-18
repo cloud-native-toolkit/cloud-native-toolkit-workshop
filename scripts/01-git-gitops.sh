@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR=$(dirname "$0")
 SRC_DIR="$(cd "${SCRIPT_DIR}"; pwd -P)"
 
-GIT_PROTOCOL=${GIT_PROTOCOL:-https}
+GIT_PROTOCOL=${GIT_PROTOCOL:-http}
 GIT_HOST=${GIT_HOST:-gogs.tools:3000}
 GIT_ORG=${GIT_ORG:-toolkit}
 GIT_REPO=${GIT_REPO:-gitops}
