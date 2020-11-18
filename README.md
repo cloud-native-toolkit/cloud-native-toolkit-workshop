@@ -6,13 +6,14 @@
 
 - Instructor will provide the following info:
     - OpenShift Console URL (OCP_CONSOLE_URL)
-    - Assigned username and password for both OpenShift and Git Server
+    - The username and password for OpenShift and Git Server
 
 - Fork application template git repo
-    - Open Developer Dashboard
+    - Open IBM Cloud Native Toolkit Developer Dashboard from the OpenShift Console
     - Select Starter Kits
-    - Select Workshop App
+    - Select Workshop App Template
     - Login into GIT Sever using the provided username and password
+    - WARNING: There is bug in the link url, remove the last part of the path `/generate`
     - Fork the repository `app` from the user `toolkit`
     - Copy the HTTP url to the new git repository
 
@@ -28,7 +29,7 @@
     cd app
     ```
 
-- Login using provided username and password into OpenShift server using the CLI
+- Login using provided username and password into OpenShift server using the CLI. I recommend using the Console fom the top right drop down username, select Copy Login Command.
     ```
     oc login $OCP_URL
     ```

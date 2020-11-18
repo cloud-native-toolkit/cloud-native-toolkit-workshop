@@ -9,6 +9,7 @@ COUNT_USERS=${COUNT_USERS:-15}
 
 for (( c=1; c<=COUNT_USERS; c++ )); do
   oc adm groups add-users argocd-admins user${c}
+  oc create ns user${c}-dev
 done
 
 
