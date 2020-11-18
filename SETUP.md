@@ -1,24 +1,4 @@
-## Setup Workshop
-
-## Setup Workstation Shell
-
-Use the IBM Cloud Shell
-
-1. Verify `oc` CLI is version 4.5+
-    ```bash
-    oc version --client
-    ```
-2. Install nodejs with nvm
-    ```bash
-    rm -rf ~/.npm
-    mkdir ~/.npm
-    export PATH=~/.npm/bin:$PATH
-    npm config set prefix ~/.npm
-    ```
-3. Install the IBM Cloud Toolkit CLI
-    ```bash
-    npm i -g @ibmgaragecloud/cloud-native-toolkit-cli
-    ```
+## Setup the Workshop Environment
 
 ### Setup OpenShift Cluster
 

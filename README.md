@@ -1,6 +1,6 @@
 # IBM Cloud Native Toolkit Workshop
 
-- Prerequisites (see [Setup#Workstation](./SETUP.md#setup-workstation-shell))
+- Prerequisites (see [Setup Workstation](./IBM-CLOUD-SHELL.md))
     - OpenShift [oc](https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/) CLI 4.5+
     - [Cloud Native Toolkit](https://www.npmjs.com/package/@ibmgaragecloud/cloud-native-toolkit-cli) CLI
 
