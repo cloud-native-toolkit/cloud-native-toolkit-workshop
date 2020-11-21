@@ -8,7 +8,6 @@ https://cloudnativetoolkit.dev/getting-started-day-0/plan-installation/multi-clo
 Get a free cluster for a couple or hours.
 https://developer.ibm.com/openlabs/openshift
 
-TODO: script this step.
 Setup user accounts for the openshift cluster using name name and password (ie user1:user1, user2:user2, etc..)
 
 ```bash
@@ -128,15 +127,19 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
 
     oc scale deployment dashboard-developer-dashboard --replicas 1 -n tools
     ```
-1. Make all users cluster-admin for now
-   ```bash
-   oc apply -f rbac/cluster-admins.yaml
-   ```
-1. Pre-create RBAC to allow namespaces in `userxx-qa` to be able to pull from `userxx-dev`
+1. Allow namespaces in `userxx-qa` to be able to pull images from any namespace
     ```bash
     oc apply -f rbac/system-image-puller.yaml
     ```
-1. Add Users to ArgoCD Group
+1. Allow users to copy configmaps, secrets, and tekton resources from `tools` namespace
+   ```bash
+   oc apply -f rbac/view-tools-cm-secrets.yaml
+   ```
+1. Add users to ArgoCD Group
     ```bash
     ./scripts/04-ocp-group.sh
     ```
+1. TODO: This should not be need it. For now make all users cluster-admin
+   ```bash
+   oc apply -f rbac/cluster-admins.yaml
+   ```
