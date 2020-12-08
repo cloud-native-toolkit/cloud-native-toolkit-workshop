@@ -127,17 +127,25 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
 
     oc scale deployment dashboard-developer-dashboard --replicas 1 -n tools
     ```
-1. Allow namespaces in `userxx-qa` to be able to pull images from any namespace
+1. Add users to ArgoCD Group
     ```bash
-    oc apply -f rbac/system-image-puller.yaml
+    ./scripts/04-ocp-group-argocd.sh
+    ```
+1. Add users to Toolkit Group
+    ```bash
+    ./scripts/05-ocp-group-toolkit.sh
+    ```
+1. Allow users to list and get CRDs
+    ```bash
+    ./scripts/06-ocp-crds.sh
     ```
 1. Allow users to copy configmaps, secrets, and tekton resources from `tools` namespace
    ```bash
-   oc apply -f rbac/view-tools-cm-secrets.yaml
+   ./scripts/07-ocp-tools-view.sh
    ```
-1. Add users to ArgoCD Group
+1. Allow namespaces in `userxx-qa` to be able to pull images from any namespace
     ```bash
-    ./scripts/04-ocp-group.sh
+    ./scripts/08-ocp-system-puller.sh
     ```
 1. TODO: This should not be need it. For now make all users cluster-admin
    ```bash
