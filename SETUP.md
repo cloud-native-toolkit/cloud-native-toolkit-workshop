@@ -119,14 +119,6 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
     Cluster: in-cluster
     Namespace: tools
     ```
-1. TODO: script this step: Update starter Kits to point to Gogs, update [dashboard/lnks.json](dashboard/lnks.json). Update the links.json with the correct hostname of gogs route, make the json file available in a public url and then run the following command
-    ```bash
-    oc patch cm ibmcloud-config -n tools --type merge -p "{\"data\": {\"LINKS_URL\": \"https://raw.githubusercontent.com/ibm-garage-cloud/cloud-native-toolkit-workshops/main/dashboard/links.json\"}}"
-
-    oc scale deployment dashboard-developer-dashboard --replicas 0 -n tools
-
-    oc scale deployment dashboard-developer-dashboard --replicas 1 -n tools
-    ```
 1. Add users to ArgoCD Group
     ```bash
     ./scripts/04-ocp-group-argocd.sh
@@ -146,6 +138,10 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
 1. Allow namespaces in `userxx-qa` to be able to pull images from any namespace
     ```bash
     ./scripts/08-ocp-system-puller.sh
+    ```
+1. Update the Developer Dashboard to point to Git Server for code patterns
+    ```bash
+    ./scripts/09-toolkit-dashboard.sh
     ```
 1. TODO: This should not be need it. For now make all users cluster-admin
    ```bash
