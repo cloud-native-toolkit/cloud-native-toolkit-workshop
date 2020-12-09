@@ -18,7 +18,6 @@ else
   echo "git url not passed by parameter"
   echo "getting url from route"
   GIT_BASE_URL="http://$(oc get route -n ${TOOLKIT_NAMESPACE} gogs --template='{{.spec.host}}')"
-
 fi
 
 GIT_REPOS="https://github.com/IBM/template-node-react,node-react \
