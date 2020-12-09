@@ -42,19 +42,13 @@ spec:
 
 https://cloudnativetoolkit.dev/getting-started-day-0/install-toolkit/quick-install
 
-### Install Git Server
-
-Deploy Gogs Git server
-
-```bash
-oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-template.yaml --param=PROTOCOL=https --param=HOSTNAME=gogs-tools.$(oc get ingresses.config.openshift.io cluster -o template={{.spec.domain}}) -n tools
-```
 
 ### Configure Git Server
 
-1. Login into Git Server and register as admin with username `toolkit` with password `toolkit`
-1. Create a Access Token with name `toolkit` "Your Settings"->"Applications"->"Generate New Token"
-1. Create new repo with name `gitops` under the account `toolkit` make it a public git repo and leave it empty, the next step will populate content.
+1. Install Git server, setup admin user toolkit with password toolkit
+    ```bash
+    ./00-git-install.sh
+    ```
 1. Run the following scripts to create the branches `master`, `qa ` and `staging`
     ```
     GIT_HOST=$(oc get route -n tools gogs --template='{{.spec.host}}') \
@@ -72,53 +66,6 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
 
 ### Configure Toolkit
 
-1. Update Console Link for Git to point to gogs url
-    ```bash
-    GOGS_CONSOLE_URL=$(oc get route -n tools gogs --template='https://{{.spec.host}}')
-    oc patch consolelink toolkit-sourcecontrol --type merge -p "{\"spec\": {\"href\": \"$GOGS_CONSOLE_URL\"}}"
-    ```
-1. Configure tools namespace with gitops-cd-secret in the tools namespace
-    ```bash
-    NAMESPACE=tools
-
-    oc delete secret gitops-cd-secret -n ${NAMESPACE} || true
-
-    oc create secret -n tools generic gitops-cd-secret \
-    --from-literal username=toolkit \
-    --from-literal password=toolkit \
-    -n ${NAMESPACE}
-
-
-    oc label secret gitops-cd-secret group=catalyst-tools -n ${NAMESPACE}
-    ```
-1. Configure `tools` namespace with `gitops-repo` configMap
-    ```bash
-    NAMESPACE=tools
-
-    oc delete cm gitops-repo -n ${NAMESPACE} || true
-
-    oc create cm gitops-repo \
-    --from-literal parentdir="bash -c 'basename \${NAMESPACE} -dev'" \
-    --from-literal host=$(oc get route -n tools gogs --template='{{.spec.host}}') \
-    --from-literal branch=qa \
-    --from-literal org=toolkit \
-    --from-literal repo=gitops \
-    --from-literal protocol=http \
-    -n ${NAMESPACE}
-
-    oc label cm gitops-repo group=catalyst-tools -n ${NAMESPACE}
-    ```
-1. Login into ArgoCD and create an application with the following settings:
-    ```
-    Applicatio Name: toolkit
-    Project: default
-    Sync Policy: Automatic, check boxes "Prune" and "Self Heal"
-    Repository URL: http://gogs.tools:3000/toolkit/gitops.git
-    Revision: master
-    Path: argoprojects
-    Cluster: in-cluster
-    Namespace: tools
-    ```
 1. Add users to ArgoCD Group
     ```bash
     ./scripts/04-ocp-group-argocd.sh
@@ -142,6 +89,22 @@ oc new-app -f https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-te
 1. Update the Developer Dashboard to point to Git Server for code patterns
     ```bash
     ./scripts/09-toolkit-dashboard.sh
+    ```
+1. Configure tools namespace with gitops-cd-secret in the tools namespace
+    ```bash
+    ./scripts/10-toolkit-gitops-secret.sh
+    ```
+1. Configure `tools` namespace with `gitops-repo` configMap
+    ```bash
+    ./scripts/11-toolkit-gitops-secret.sh
+    ```
+1. Create the top level ArgoCD Application for all Toolkit Applications
+    ```bash
+    ./scripts/12-toolkit-console-git.sh
+    ```
+1. Update Console Link for Git to point to gogs url
+    ```bash
+    ./scripts/13-toolkit-console-git.sh
     ```
 1. TODO: This should not be need it. For now make all users cluster-admin
    ```bash
