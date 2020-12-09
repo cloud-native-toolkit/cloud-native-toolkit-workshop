@@ -13,7 +13,6 @@
     - Select Starter Kits
     - Select Workshop App Template
     - Login into GIT Sever using the provided username and password
-    - WARNING: There is bug in the link url, remove the last part of the path `/generate`
     - Fork the repository `app` from the user `toolkit`
     - Copy the HTTP url to the new git repository
 
@@ -45,7 +44,7 @@
     ```
     - Select `Tekton`
     - Enter `userx` as username
-    - Enter `userx` as token/password
+    - Enter `password` as token/password
     - Hit Enter to select branch `master`
     - Use down arrow and select `ibm-golang`
     - Hit Enter to select  Y for image scanning
