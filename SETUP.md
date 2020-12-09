@@ -47,21 +47,15 @@ https://cloudnativetoolkit.dev/getting-started-day-0/install-toolkit/quick-insta
 
 1. Install Git server, setup admin user toolkit with password toolkit
     ```bash
-    ./00-git-install.sh
+    ./scripts/00-git-install.sh
     ```
-1. Run the following scripts to create the branches `master`, `qa ` and `staging`
+1. Create all the git repositories for the org toolkit
     ```
-    GIT_HOST=$(oc get route -n tools gogs --template='{{.spec.host}}') \
-    ./scripts/01-git-gitops.sh
+    ./scripts/01-git-repos.sh
     ```
-1. Create new migration repo using one of the templates below, and  name the repository `app`, leave it public.
-    - https://github.com/IBM/template-go-gin
-    - https://github.com/IBM/template-node-typescript
-    - https://github.com/IBM/template-java-spring
-
-1. Create user accounts (ie user1:user1, user2:user2) or allow users to register in git server.
-    ```
-    GIT_HOST=$(oc get route -n tools gogs --template='{{.spec.host}}') ./scripts/02-git-users.sh
+1. Create user accounts (ie user1,user2,...,user15) default password is `password` or allow users to register in git server.
+    ```bash
+    ./scripts/02-git-users.sh
     ```
 
 ### Configure Toolkit
