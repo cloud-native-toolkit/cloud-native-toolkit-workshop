@@ -15,7 +15,7 @@ USER_PREFIX=${USER_PREFIX:-user}
 oc get groups ${TOOLKIT_GROUP} &>/dev/null || oc adm groups new ${TOOLKIT_GROUP}
 
 for (( c=1; c<=COUNT_USERS; c++ )); do
-  oc adm groups add-users ibm-toolkit ${USER_PREFIX}${c}
+  oc adm groups add-users ${TOOLKIT_GROUP} ${USER_PREFIX}${c}
 done
 
 
