@@ -35,7 +35,12 @@ for i in ${GIT_REPOS}; do
 IFS=","
 set $i
 echo $1 $2
-sed -i .bak "s~${1}~${GIT_URL}/${GIT_USER}/${2}~" links.json
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  sed -i .bak "s~${1}~${GIT_URL}/${GIT_USER}/${2}~" links.json
+else
+  sed -i "s~${1}~${GIT_URL}/${GIT_USER}/${2}~" links.json
+fi
+
 unset IFS
 done
 
