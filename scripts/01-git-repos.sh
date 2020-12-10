@@ -11,6 +11,8 @@ GIT_HOST=$(oc get route -n ${TOOLKIT_NAMESPACE} gogs --template='{{.spec.host}}'
 GIT_URL="${GIT_PROTOCOL}://${GIT_HOST}"
 GIT_ORG=${GIT_ORG:-toolkit}
 GIT_REPO=${GIT_REPO:-gitops}
+TOOLKIT_GITOPS_PATH=${TOOLKIT_GITOPS_PATH:-argoprojects}
+COUNT_USERS=${COUNT_USERS:-15}
 GIT_CRED_USERNAME=${GIT_CRED_USERNAME:-toolkit}
 GIT_CRED_PASSWORD=${GIT_CRED_PASSWORD:-toolkit}
 GIT_GITOPS_URL="${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/${GIT_REPO}.git"
@@ -24,7 +26,45 @@ curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: applica
 TMP_DIR=$(mktemp -d)
 pushd "${TMP_DIR}"
 
-cp -r "${SRC_DIR}/../gitops/" .
+mkdir -p "${TOOLKIT_GITOPS_PATH}"
+
+cat > "${TOOLKIT_GITOPS_PATH}/Chart.yaml" <<EOF
+apiVersion: v2
+version: 0.1.0
+name: project-config-helm
+description: Chart to configure ArgoCD with the {project-name} project and its applications
+
+dependencies:
+- name: argocd-config
+  version: 0.15.0
+  repository: https://ibm-garage-cloud.github.io/toolkit-charts
+EOF
+cat > "${TOOLKIT_GITOPS_PATH}/README.md" <<EOF
+e gitops example edit `values.yaml` to add more Argo Applications
+EOF
+cat > "${TOOLKIT_GITOPS_PATH}/values.yaml" <<EOF
+global: {}
+
+argocd-config:
+  repoUrl: "http://gogs.tools:3000/toolkit/gitops.git"
+
+  project: toolkit
+
+  applicationTargets:
+EOF
+for (( c=1; c<=COUNT_USERS; c++ )); do
+  cat >> "${TOOLKIT_GITOPS_PATH}/values.yaml" <<EOF
+    - targetRevision: qa
+      createNamespace: true
+      targetNamespace: user${c}-qa
+      applications:
+        - name: user${c}-app
+          path: user${c}/app
+          type: helm
+EOF
+
+done
+
 git init
 git config --local user.email "toolkit@cloudnativetoolkit.dev"
 git config --local user.name "IBM Cloud Native Toolkit"
@@ -47,7 +87,7 @@ git push origin qa
 
 popd
 
-
+exit
 echo "creating code patterns"
 GIT_REPOS="https://github.com/IBM/template-go-gin,app \
            https://github.com/IBM/template-node-react,node-react \
