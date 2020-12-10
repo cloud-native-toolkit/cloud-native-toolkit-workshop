@@ -8,17 +8,11 @@ SRC_DIR="$(cd "${SCRIPT_DIR}"; pwd -P)"
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 TOOLKIT_DASHBOARD_CONFIG=${TOOLKIT_DASHBOARD_CONFIG:-developer-dashboard-config}
 TOOLKIT_DASHBOARD_DEPLOY=${TOOLKIT_DASHBOARD_DEPLOY:-dashboard-developer-dashboard}
-
+GIT_PROTOCOL=${GIT_PROTOCOL:-http}
+GIT_HOST=$(oc get route -n ${TOOLKIT_NAMESPACE} gogs --template='{{.spec.host}}')
+GIT_URL="${GIT_PROTOCOL}://${GIT_HOST}"
 GIT_USER=${GIT_USER:-toolkit}
 ORGINAL_JSON_URL=${ORGINAL_JSON_URL:-https://raw.githubusercontent.com/ibm-garage-cloud/developer-dashboard/master/public/data/links.json}
-
-if [[ "$#" -eq 1 ]]; then
-  GIT_BASE_URL=$1
-else
-  echo "git url not passed by parameter"
-  echo "getting url from route"
-  GIT_BASE_URL="http://$(oc get route -n ${TOOLKIT_NAMESPACE} gogs --template='{{.spec.host}}')"
-fi
 
 GIT_REPOS="https://github.com/IBM/template-node-react,node-react \
            https://github.com/IBM/template-node-angular,node-angular \
@@ -41,7 +35,7 @@ for i in ${GIT_REPOS}; do
 IFS=","
 set $i
 echo $1 $2
-sed -i .bak "s~${1}~${GIT_BASE_URL}/${GIT_USER}/${2}~" links.json
+sed -i .bak "s~${1}~${GIT_URL}/${GIT_USER}/${2}~" links.json
 unset IFS
 done
 
