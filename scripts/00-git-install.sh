@@ -20,7 +20,8 @@ oc new-app \
 -f ${GOGS_YAML} \
 --param=HOSTNAME=${GIT_HOST}
 
-oc rollout status dc/gogs
+
+oc rollout status dc/gogs -n ${TOOLKIT_NAMESPACE}
 
 echo "creating admin user ${GIT_CRED_USERNAME}"
 curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "${GOGS_POST_FORM}" "${GIT_URL}/user/sign_up"
