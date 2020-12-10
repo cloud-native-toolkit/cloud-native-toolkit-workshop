@@ -45,6 +45,6 @@ unset IFS
 done
 
 oc delete cm ${TOOLKIT_DASHBOARD_CONFIG} -n ${TOOLKIT_NAMESPACE} || true
-oc create cm ${TOOLKIT_DASHBOARD_CONFIG} --from-file=LINKS_URL_DATA=links.json
+oc create cm ${TOOLKIT_DASHBOARD_CONFIG} -n ${TOOLKIT_NAMESPACE} --from-file=LINKS_URL_DATA=links.json
 oc set env deployment/${TOOLKIT_DASHBOARD_DEPLOY} -c developer-dashboard -n ${TOOLKIT_NAMESPACE} --from=configmap/${TOOLKIT_DASHBOARD_CONFIG}
 popd
