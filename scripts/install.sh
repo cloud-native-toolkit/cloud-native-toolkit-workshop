@@ -20,6 +20,11 @@ INSTALL_SCRIPTS="00-git-install.sh \
                  23-toolkit-gitops-project.sh \
                  24-toolkit-console-git.sh"
 
+
+
+STARTTIME=$(date +%s)
 for i in ${INSTALL_SCRIPTS}; do
  curl -sL "${INSTALL_BASE_URL}/${i}" | bash
 done
+DURATION=$(($(date +%s) - $STARTTIME))
+echo -e "\033[0;92m Toolkit Workshop install took: $(($DURATION / 60))m$(($DURATION % 60))s \033[0m"
