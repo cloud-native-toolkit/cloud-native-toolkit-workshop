@@ -1,0 +1,12 @@
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster-temp
+spec:
+  identityProviders:
+  - htpasswd:
+      fileData:
+        name: ibm-toolkit-htpasswd-temp
+    mappingMethod: claim
+    name: htpasswd
+    type: HTPasswd

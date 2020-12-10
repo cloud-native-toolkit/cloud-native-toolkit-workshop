@@ -19,18 +19,19 @@
 - Setup environment variables for the user
     ```bash
     USERNAME=<REPLACE ME WITH USERNAME PROVIDED>
-    GIT_URL=http://gogs-tools.<subdomain>/$USERNAME/app
+    SUBDOMAIN=<REPLACE ME WITH SUBDOMAIN PROVIDED>
+    GIT_URL=http://gogs-tools.$SUBDOMAIN/$USERNAME/app
     ```
 
 - Clone the git repository and change directory
-    ```
+    ```bash
     git clone $GIT_URL
     cd app
     ```
 
-- Login using provided username and password into OpenShift server using the CLI. I recommend using the Console fom the top right drop down username, select Copy Login Command.
+- Login using OpenShift CLI.
     ```
-    oc login $OCP_URL
+    oc login $OCP_URL -u $USERNAME -p password
     ```
 
 - Create a project/namespace using your username as prefix, and `-dev` and suffix
