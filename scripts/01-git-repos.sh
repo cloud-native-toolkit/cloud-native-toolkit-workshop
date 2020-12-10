@@ -87,7 +87,6 @@ git push origin qa
 
 popd
 
-exit
 echo "creating code patterns"
 GIT_REPOS="https://github.com/IBM/template-go-gin,app \
            https://github.com/IBM/template-node-react,node-react \
