@@ -24,7 +24,7 @@ for (( c=1; c<=COUNT_USERS; c++ )); do
   oc adm policy add-cluster-role-to-group system:image-puller "system:serviceaccounts:${USER_PREFIX}${c}-prod"
 done
 
-oc delete secret ${TOOLKIT_SECRET} -n openshift-config || true
+oc delete secret ${TOOLKIT_SECRET} -n openshift-config 2>/dev/null || true
 oc create secret generic ${TOOLKIT_SECRET} -n openshift-config --from-file=${HTPASSWD_FILENAME}=${HTPASSWD_FILENAME}
 oc patch OAuth cluster --type json -p "[{\"op\":\"add\",\"path\":\"/spec/identityProviders/-\",\"value\":{\"htpasswd\":{\"fileData\":{\"name\":\"${TOOLKIT_SECRET}\"}},\"mappingMethod\":\"claim\",\"name\":\"ibm-toolkit\",\"type\":\"HTPasswd\"} }]"
 

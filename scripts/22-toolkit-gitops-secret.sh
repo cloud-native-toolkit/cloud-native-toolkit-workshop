@@ -9,7 +9,7 @@ TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 TOOLKIT_GITOPS_USERNAME=${TOOLKIT_GITOPS_USERNAME:-toolkit}
 TOOLKIT_GITOPS_PASSWORD=${TOOLKIT_GITOPS_PASSWORD:-toolkit}
 
-oc delete secret gitops-cd-secret -n ${TOOLKIT_NAMESPACE} || true
+oc delete secret gitops-cd-secret -n ${TOOLKIT_NAMESPACE} 2>/dev/null || true
 
 oc create secret -n tools generic gitops-cd-secret \
 --from-literal username=${TOOLKIT_GITOPS_USERNAME} \

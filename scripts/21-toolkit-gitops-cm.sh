@@ -12,7 +12,7 @@ TOOLKIT_GITOPS_ORG=${TOOLKIT_GITOPS_ORG:-toolkit}
 TOOLKIT_GITOPS_REPO=${TOOLKIT_GITOPS_REPO:-gitops}
 TOOLKIT_GITOPS_PROTOCOL=${TOOLKIT_GITOPS_PROTOCOL:-http}
 
-oc delete cm gitops-repo -n ${TOOLKIT_NAMESPACE} || true
+oc delete cm gitops-repo -n ${TOOLKIT_NAMESPACE} 2>/dev/null || true
 
 oc create cm gitops-repo \
 --from-literal parentdir="bash -c 'basename \${NAMESPACE} -dev'" \

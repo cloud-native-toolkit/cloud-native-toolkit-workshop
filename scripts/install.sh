@@ -15,8 +15,8 @@ INSTALL_SCRIPTS="00-git-install.sh \
                  11-ocp-group-argocd.sh \
                  12-ocp-group-toolkit.sh \
                  20-toolkit-dashboard.sh \
-                 21-toolkit-gitops-secret.sh \
-                 22-toolkit-gitops-cm.sh \
+                 21-toolkit-gitops-cm.sh \
+                 22-toolkit-gitops-secret.sh \
                  23-toolkit-gitops-project.sh \
                  24-toolkit-console-git.sh"
 
