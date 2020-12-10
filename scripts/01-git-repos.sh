@@ -26,6 +26,8 @@ pushd "${TMP_DIR}"
 
 cp -r "${SRC_DIR}/../gitops/" .
 git init
+git config --local user.email "toolkit@cloudnativetoolkit.dev"
+git config --local user.name "IBM Cloud Native Toolkit"
 git add .
 git commit -m "first commit"
 git remote add origin ${GIT_GITOPS_URL}
@@ -73,6 +75,8 @@ git clone --depth 1 --no-tags $1 repo
 cd repo
 rm -rf .git
 git init
+git config --local user.email "toolkit@cloudnativetoolkit.dev"
+git config --local user.name "IBM Cloud Native Toolkit"
 git add .
 git commit -m "initial commit"
 git remote add downstream ${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/$2.git
