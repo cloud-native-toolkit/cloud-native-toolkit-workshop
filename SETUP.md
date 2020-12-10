@@ -2,7 +2,7 @@
 
 ### Create OpenShift Cluster
 
-- Create a cluster using [cloudnativetoolkit.dev](https://cloudnativetoolkit.dev/getting-started-day-0/plan-installation/multi-cloud)
+- Create a cluster for example using [cloudnativetoolkit.dev](https://cloudnativetoolkit.dev/getting-started-day-0/plan-installation/multi-cloud)
 
 ### Install IBM Cloud Native Toolkit
 
