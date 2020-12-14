@@ -18,6 +18,9 @@ GIT_CRED_PASSWORD=${GIT_CRED_PASSWORD:-toolkit}
 GIT_GITOPS_URL="${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/${GIT_REPO}.git"
 ACCESS_TOKEN=$(curl -s -u "${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}" "${GIT_URL}/api/v1/users/${GIT_CRED_USERNAME}/tokens" | jq -r '.[0].sha1')
 
+response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/repos/${GIT_ORG}/${GIT_REPO}")
+
+if [[ "${response}" != "200" ]]; then
 
 echo "creating gitops repo ${GIT_ORG}/${GIT_REPO}.git"
 curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"name\": \"${GIT_REPO}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
@@ -87,6 +90,8 @@ git push origin qa
 
 popd
 
+fi #ends check if repo exits
+
 echo "creating code patterns"
 GIT_REPOS="https://github.com/IBM/template-go-gin,app \
            https://github.com/IBM/template-node-react,node-react \
@@ -106,6 +111,13 @@ set $i
 echo "snapshot git repo $1 into $2"
 TMP_DIR=$(mktemp -d)
 pushd "${TMP_DIR}"
+
+response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/repos/${GIT_ORG}/$2")
+
+if [[ "${response}" == "200" ]]; then
+  echo "repo already exists ${GIT_HOST}/${GIT_ORG}/$2.git"
+  continue
+fi
 
 echo "Creating repo for ${GIT_HOST}/${GIT_ORG}/$2.git"
 curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"name\": \"${2}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
