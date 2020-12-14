@@ -39,9 +39,7 @@ dependencies:
   version: 0.15.0
   repository: https://ibm-garage-cloud.github.io/toolkit-charts
 EOF
-cat > "${TOOLKIT_GITOPS_PATH}/README.md" <<EOF
-e gitops example edit `values.yaml` to add more Argo Applications
-EOF
+
 cat > "${TOOLKIT_GITOPS_PATH}/values.yaml" <<EOF
 global: {}
 
@@ -68,6 +66,7 @@ done
 git init
 git config --local user.email "toolkit@cloudnativetoolkit.dev"
 git config --local user.name "IBM Cloud Native Toolkit"
+echo "This is the gitops branch edit value.yaml to add more Apps" > README.md
 git add .
 git commit -m "first commit"
 git remote add origin ${GIT_GITOPS_URL}
@@ -75,6 +74,7 @@ git push -u origin master
 
 git checkout --orphan staging
 echo "This is the staging environment" > README.md
+rm -r ${TOOLKIT_GITOPS_PATH}
 git add README.md
 git commit -m "first commit for staging"
 git push origin staging

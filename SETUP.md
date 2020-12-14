@@ -8,6 +8,12 @@
 
 - Use one of the install options for example the [Quick Install](https://cloudnativetoolkit.dev/getting-started-day-0/install-toolkit/quick-install)
 
+To run all the scripts below run this command:
+TLDR:
+```bash
+curl -sL https://raw.githubusercontent.com/ibm-garage-cloud/cloud-native-toolkit-workshops/main/scripts/install.sh | bash
+```
+
 ### Configure Git Server
 
 1. Install Git server, setup admin user toolkit with password toolkit
