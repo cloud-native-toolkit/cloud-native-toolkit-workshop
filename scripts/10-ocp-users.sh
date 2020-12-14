@@ -25,7 +25,7 @@ for (( c=1; c<=COUNT_USERS; c++ )); do
 done
 
 oc delete secret ${TOOLKIT_SECRET} -n openshift-config 2>/dev/null || true
-oc create secret generic ${TOOLKIT_SECRET} -n openshift-config --from-file=${HTPASSWD_FILENAME}=${HTPASSWD_FILENAME}
+oc create secret generic ${TOOLKIT_SECRET} -n openshift-config --from-file=htpasswd=${HTPASSWD_FILENAME}
 oc get OAuth cluster -o yaml | grep ${TOOLKIT_SECRET}
 if [[ $? -ne 0 ]]; then
   echo "updating OAuth with toolkit users"
