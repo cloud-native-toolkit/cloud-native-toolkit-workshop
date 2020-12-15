@@ -15,8 +15,8 @@ GIT_CRED_USERNAME=${GIT_CRED_USERNAME:-toolkit}
 GIT_CRED_PASSWORD=${GIT_CRED_PASSWORD:-toolkit}
 GOGS_POST_FORM="user_name=${GIT_CRED_USERNAME}&password=${GIT_CRED_PASSWORD}&retype=${GIT_CRED_PASSWORD}&email=toolkit%40cloudnativetoolkit.dev"
 
-oc get pods -n tools -l app=gogs | grep Running
-if [[ $? -eq 0 ]]; then
+status=$(oc get pods -n ${TOOLKIT_NAMESPACE} -l app=gogs)
+if [[ "$status" =~ "Running" ]]; then
   echo "gogs git server already installed"
   exit 0
 fi
