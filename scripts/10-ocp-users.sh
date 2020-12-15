@@ -27,7 +27,7 @@ done
 oc delete secret ${TOOLKIT_SECRET} -n openshift-config 2>/dev/null || true
 oc create secret generic ${TOOLKIT_SECRET} -n openshift-config --from-file=htpasswd=${HTPASSWD_FILENAME}
 oauth=$(oc get OAuth cluster -o yaml)
-if [[ "${oauth}" =~ "${TOOLKIT_SECRET}" ]]; then
+if [[ ! "${oauth}" =~ "${TOOLKIT_SECRET}" ]]; then
   echo "updating OAuth with toolkit users"
   oc patch OAuth cluster --type json -p "[{\"op\":\"add\",\"path\":\"/spec/identityProviders/-\",\"value\":{\"htpasswd\":{\"fileData\":{\"name\":\"${TOOLKIT_SECRET}\"}},\"mappingMethod\":\"claim\",\"name\":\"ibm-toolkit\",\"type\":\"HTPasswd\"} }]"
 fi
