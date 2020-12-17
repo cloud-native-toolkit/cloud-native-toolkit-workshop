@@ -122,7 +122,7 @@ fi
 echo "Creating repo for ${GIT_HOST}/${GIT_ORG}/$2.git"
 curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"name\": \"${2}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
 
-git clone --depth 1 --no-tags $1 repo
+git clone --depth 1 $1 repo
 cd repo
 rm -rf .git
 git init
