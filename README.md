@@ -6,7 +6,8 @@ This repository contains the assets to assist individuals giving workshops using
 
 | Activities                   | Description                                |
 | ---------------------------- | ------------------------------------------ |
-| [activity-1](./activity-1/)  | Deploy an Application  using CI and CD     |
+| [activity-1](./activity-1/)  | Deploy an Application using CICD           |
 | [activity-2](./activity-2/)  | Promote an Application using GitOps        |
 | [activity-3](./activity-3/)  | Deploy a 3 tier Microservice UI-BFF-SVC    |
+| [activity-4](./activity-4/)  | Deploy an Operator using CICD              |
 
