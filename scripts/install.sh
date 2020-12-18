@@ -5,9 +5,9 @@ set -euo pipefail
 SCRIPT_DIR=$(dirname "$0")
 SRC_DIR="$(cd "${SCRIPT_DIR}"; pwd -P)"
 
-# Run this script like this curl -sL https://raw.githubusercontent.com/ibm-garage-cloud/cloud-native-toolkit-workshops/main/scripts/install.sh | bash
+# Run this script like this "curl -sfL workshop.cloudnativetoolkit.dev | sh -"
 
-INSTALL_BASE_URL="https://raw.githubusercontent.com/ibm-garage-cloud/cloud-native-toolkit-workshops/main/scripts"
+INSTALL_BASE_URL="https://raw.githubusercontent.com/ibm-garage-cloud/cloud-native-toolkit-workshop/main/scripts"
 INSTALL_SCRIPTS="00-git-install.sh \
                  01-git-repos.sh \
                  02-git-users.sh \
