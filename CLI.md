@@ -3,13 +3,11 @@
 ### IBM Cloud Shell
 
 1. Login into the [IBM Cloud Shell](https://cloud.ibm.com/shell)
-1. Setup npm for local user
+1. Setup the cloud shell
     ```bash
-    rm -rf ~/.npm
-    mkdir ~/.npm
-    export PATH=~/.npm/bin:$PATH
-    npm config set prefix ~/.npm
-
+    git clone https://github.com/ibm-garage-cloud/cloud-shell-commands.git
+    export PATH=~/cloud-shell-commands:$PATH
+    source ./cloud-shell-commands/install-igc
     ```
 1. Install the IBM Cloud Toolkit CLI
     ```bash
