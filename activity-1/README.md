@@ -24,9 +24,10 @@ If using IBM Cloud cluster then login with your IBM account email and IAM API Ke
 1. Fork application template git repo
     - Open IBM Cloud Native Toolkit Developer Dashboard from the OpenShift Console
     - Select Starter Kits
-    - Select Workshop App Template
-    - Login into GIT Sever using the provided username and password
-    - Fork the repository `app` from the user `toolkit`
+    - Select One in our case **Go Gin Microservice**
+    - Click Fork
+    - Login into GIT Sever using the provided username and password (ie `user1` and `password`)
+    - **IMPORTANT**: Rename Repository Name to `app`
     - Copy the HTTP url to the new git repository
 
 1. Setup environment variable `GIT_URL` for the git url using the value from previous step or as following
@@ -54,7 +55,7 @@ If using IBM Cloud cluster then login with your IBM account email and IAM API Ke
     - Enter `password` as token/password
     - Hit Enter to select branch `master`
     - Use down arrow and select `ibm-golang`
-    - Hit Enter to select  Y for image scanning
+    - Enter `n` for image scanning to speed up the pipeline run
     - Open the url to see the pipeline running in the OpenShift Console
 
 1. Verify that Pipeline Run completeled succesfully
