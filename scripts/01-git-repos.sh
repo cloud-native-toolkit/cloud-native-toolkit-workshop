@@ -63,16 +63,6 @@ for (( c=1; c<=COUNT_USERS; c++ )); do
           path: user${c}/app
           type: helm
 EOF
-for (( c=1; c<=COUNT_USERS; c++ )); do
-  cat >> "${TOOLKIT_GITOPS_PATH}/values.yaml" <<EOF
-    - targetRevision: staging
-      createNamespace: true
-      targetNamespace: user${c}-staging
-      applications:
-        - name: user${c}-app
-          path: user${c}/app
-          type: helm
-EOF
 
 done
 
