@@ -77,7 +77,7 @@ git push -u origin master
 
 git checkout --orphan staging
 echo "This is the staging environment" > README.md
-git rm -r ${TOOLKIT_GITOPS_PATH}
+#git rm -r ${TOOLKIT_GITOPS_PATH}
 git add README.md
 git commit -m "first commit for staging"
 git push origin staging
