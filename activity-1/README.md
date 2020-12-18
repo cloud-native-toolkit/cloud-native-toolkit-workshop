@@ -85,7 +85,7 @@ If using IBM Cloud cluster then login with your IBM account email and IAM API Ke
 
 1. Filter by namespace `$USERNAME-qa`
 
-1. In ArgoCD UI select the application `qa-$USERNAME-app` in Argo and verify is OK
+1. In ArgoCD UI select the application `qa-$USERNAME-app` in Argo, click `SYNC` if the app is not synchronized and verify that is OK
 
 1. In OpenShift Console switch to project `$USERNAME-qa` and open the application.
 
