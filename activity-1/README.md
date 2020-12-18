@@ -32,7 +32,8 @@ If using IBM Cloud cluster then login with your IBM account email and IAM API Ke
 
 1. Setup environment variable `GIT_URL` for the git url using the value from previous step or as following
     ```bash
-    GIT_URL=http://$(oc get route -n ${TOOLKIT_NAMESPACE} gogs --template='{{.spec.host}}')/$USERNAME/app
+    GIT_URL=http://$(oc get route -n tools gogs --template='{{.spec.host}}')/$USERNAME/app
+    echo GIT_URL=${GIT_URL}
     ```
 
 1. Clone the git repository and change directory

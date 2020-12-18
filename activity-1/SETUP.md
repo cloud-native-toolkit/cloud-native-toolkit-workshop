@@ -19,3 +19,4 @@
     ```bash
     curl -sfL workshop.cloudnativetoolkit.dev | sh -
     ```
+The username and password for Git Admin is `toolkit` `toolkit`
