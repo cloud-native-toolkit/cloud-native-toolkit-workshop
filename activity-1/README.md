@@ -32,7 +32,7 @@ If using IBM Cloud cluster then login with your IBM account email and IAM API Ke
 
 1. Setup environment variable `GIT_URL` for the git url using the value from previous step or as following
     ```bash
-    GIT_URL=http://$(oc get route -n tools gogs --template='{{.spec.host}}')/$USERNAME/app
+    GIT_URL=http://${USERNAME}:password@$(oc get route -n tools gogs --template='{{.spec.host}}')/$USERNAME/app
     echo GIT_URL=${GIT_URL}
     ```
 
@@ -49,14 +49,13 @@ If using IBM Cloud cluster then login with your IBM account email and IAM API Ke
 
 1. Create a pipeline for the application
     ```
-    oc pipeline
+    oc pipeline --tekton
     ```
-    - Select `Tekton`
     - Enter `userx` as username
     - Enter `password` as token/password
     - Hit Enter to select branch `master`
     - Use down arrow and select `ibm-golang`
-    - Hit Enter to select `Y` for image scan
+    - Hit Enter to select `n` for image scan
     - Open the url to see the pipeline running in the OpenShift Console
 
 1. Verify that Pipeline Run completeled succesfully
@@ -73,6 +72,14 @@ If using IBM Cloud cluster then login with your IBM account email and IAM API Ke
 1. Open the application route url and try out the application using the swagger UI
 
 1. Make a change to the application in the git repository and see the pipeline running again from the Console.
+    ```bash
+    git config --global user.email "${USERNAME}@example.com"
+    git config --global user.name "${USERNAME}"
+    echo "Some change to git repo at $(date)" >> README.md
+    git add .
+    git commit -m "update readme"
+    git push origin master
+    ```
 
 1. Verify that the App manifests are being updated in the `gitops` repo in the git account `toolkit` under the `qa` branch.
 
