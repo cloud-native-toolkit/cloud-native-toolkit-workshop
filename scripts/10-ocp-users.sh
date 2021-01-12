@@ -47,7 +47,7 @@ spec:
       fileData:
         name: ${TOOLKIT_SECRET}
 EOF
-elif [[ ! "${oauth}" =~ "${TOOLKIT_SECRET}" ]]; then
+elif [[ ! "${OAUTH_SPEC}" =~ "${TOOLKIT_SECRET}" ]]; then
   echo "updating OAuth with toolkit users"
   oc patch OAuth cluster --type json -p "[{\"op\":\"add\",\"path\":\"/spec/identityProviders/-\",\"value\":{\"htpasswd\":{\"fileData\":{\"name\":\"${TOOLKIT_SECRET}\"}},\"mappingMethod\":\"claim\",\"name\":\"${TOOLKIT_PROVIDER_NAME}\",\"type\":\"HTPasswd\"} }]"
 fi

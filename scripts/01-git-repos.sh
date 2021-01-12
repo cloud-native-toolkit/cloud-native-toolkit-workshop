@@ -11,7 +11,8 @@ GIT_HOST=$(oc get route -n ${TOOLKIT_NAMESPACE} gogs --template='{{.spec.host}}'
 GIT_URL="${GIT_PROTOCOL}://${GIT_HOST}"
 GIT_ORG=${GIT_ORG:-toolkit}
 GIT_REPO=${GIT_REPO:-gitops}
-TOOLKIT_GITOPS_PATH=${TOOLKIT_GITOPS_PATH:-argoprojects}
+TOOLKIT_GITOPS_PATH_QA=${TOOLKIT_GITOPS_PATH_QA:-qa}
+TOOLKIT_GITOPS_PATH_QA=${TOOLKIT_GITOPS_PATH_QA:-staging}
 COUNT_USERS=${COUNT_USERS:-15}
 GIT_CRED_USERNAME=${GIT_CRED_USERNAME:-toolkit}
 GIT_CRED_PASSWORD=${GIT_CRED_PASSWORD:-toolkit}
@@ -29,9 +30,11 @@ curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: applica
 TMP_DIR=$(mktemp -d)
 pushd "${TMP_DIR}"
 
-mkdir -p "${TOOLKIT_GITOPS_PATH}"
+mkdir -p "${TOOLKIT_GITOPS_PATH_QA}"
+mkdir -p "${TOOLKIT_GITOPS_PATH_STAGING}"
 
-cat > "${TOOLKIT_GITOPS_PATH}/Chart.yaml" <<EOF
+for i in ${TOOLKIT_GITOPS_PATH_QA} ${TOOLKIT_GITOPS_PATH_STAGING}; do
+cat > "${i}/Chart.yaml" <<EOF
 apiVersion: v2
 version: 0.1.0
 name: project-config-helm
@@ -42,51 +45,34 @@ dependencies:
   version: 0.15.0
   repository: https://ibm-garage-cloud.github.io/toolkit-charts
 EOF
-
-cat > "${TOOLKIT_GITOPS_PATH}/values.yaml" <<EOF
+cat > "${i}/values.yaml" <<EOF
 global: {}
-
 argocd-config:
   repoUrl: "http://gogs.tools:3000/toolkit/gitops.git"
-
-  project: toolkit
-
+  project: toolkit-${i}
   applicationTargets:
 EOF
 for (( c=1; c<=COUNT_USERS; c++ )); do
-  cat >> "${TOOLKIT_GITOPS_PATH}/values.yaml" <<EOF
-    - targetRevision: qa
+  cat >> "${i}/values.yaml" <<EOF
+    - targetRevision: master
       createNamespace: true
-      targetNamespace: user${c}-qa
+      targetNamespace: user${c}-${i}
       applications:
         - name: user${c}-app
-          path: user${c}/app
+          path: ${i}/user${c}/app
           type: helm
 EOF
-
+done
 done
 
 git init
 git config --local user.email "toolkit@cloudnativetoolkit.dev"
 git config --local user.name "IBM Cloud Native Toolkit"
-echo "This is the gitops branch edit value.yaml to add more Apps" > README.md
+echo "Edit [qa/value.yaml](./qa/value.yaml) or [staging/value.yaml](./staging/value.yaml) to add more Apps" > README.md
 git add .
 git commit -m "first commit"
 git remote add origin ${GIT_GITOPS_URL}
 git push -u origin master
-
-git checkout --orphan staging
-echo "This is the staging environment" > README.md
-git rm -rf ${TOOLKIT_GITOPS_PATH}
-git add README.md
-git commit -m "first commit for staging"
-git push origin staging
-
-git checkout -b qa
-echo "This is the qa environment" > README.md
-git add README.md
-git commit -m "first commit for qa"
-git push origin qa
 
 popd
 
