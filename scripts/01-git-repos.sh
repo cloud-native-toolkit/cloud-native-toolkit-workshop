@@ -58,7 +58,7 @@ for (( c=1; c<=COUNT_USERS; c++ )); do
       createNamespace: true
       targetNamespace: user${c}-${i}
       applications:
-        - name: user${c}-app
+        - name: ${i}-user${c}-app
           path: ${i}/user${c}/app
           type: helm
 EOF
