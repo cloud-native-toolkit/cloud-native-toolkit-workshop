@@ -75,11 +75,14 @@ If using IBM Cloud cluster then login with your IBM account email and IAM API Ke
     ```bash
     git config --global user.email "${USERNAME}@example.com"
     git config --global user.name "${USERNAME}"
-    echo "Some change to git repo at $(date)" >> README.md
+    echo "A change to trigger a new PipelineRun $(date)" >> README.md
     git add .
     git commit -m "update readme"
-    git push origin master
+    git push -u origin master
     ```
+
+1. Verify that a new Pipeline starts succesfully
+
 
 1. Verify that the App manifests are being updated in the `gitops` repo in the git account `toolkit` under the `qa` branch.
 
