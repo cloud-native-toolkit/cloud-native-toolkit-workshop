@@ -36,6 +36,14 @@ rules:
   - list
   - watch
 - apiGroups:
+  - route.openshift.io
+  resources:
+  - routes
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - tekton.dev
   resources:
   - tasks
