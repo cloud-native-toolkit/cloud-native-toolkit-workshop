@@ -42,7 +42,7 @@ description: Chart to configure ArgoCD with the {project-name} project and its a
 
 dependencies:
 - name: argocd-config
-  version: 0.15.0
+  version: 0.16.0
   repository: https://ibm-garage-cloud.github.io/toolkit-charts
 EOF
 cat > "${i}/values.yaml" <<EOF
