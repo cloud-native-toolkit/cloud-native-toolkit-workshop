@@ -14,6 +14,8 @@ GIT_CRED_USERNAME=${GIT_CRED_USERNAME:-toolkit}
 GIT_CRED_PASSWORD=${GIT_CRED_PASSWORD:-toolkit}
 ACCESS_TOKEN=$(curl -s -u "${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}" "${GIT_URL}/api/v1/users/${GIT_CRED_USERNAME}/tokens" | jq -r '.[0].sha1')
 COUNT_USERS=${COUNT_USERS:-15}
+GIT_ORG=${GIT_ORG:-toolkit}
+GIT_REPO=${GIT_REPO:-gitops}
 
 
 for (( c=1; c<=COUNT_USERS; c++ )); do
@@ -25,4 +27,5 @@ for (( c=1; c<=COUNT_USERS; c++ )); do
   fi
   echo "Creating user user${c} on Git Server ${GIT_URL}"
   curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"username\": \"user${c}\", \"password\": \"${GIT_DEFAULT_PASSWORD}\", \"email\": \"user${c}@cloudnativetoolkit.dev\" }" "${GIT_URL}/api/v1/admin/users"
+  curl -X PUT -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" "${GIT_URL}/api/v1/repos/${GIT_ORG}/${GIT_REPO}/collaborators/user${c}"
 done
