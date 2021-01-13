@@ -13,5 +13,21 @@ GIT_NAME="Git Dev"
 GIT_NAME_OPS="Git Ops"
 
 oc patch consolelink toolkit-sourcecontrol --type merge -p "{\"spec\": {\"href\": \"${GIT_URL}\", \"text\": \"${GIT_NAME}\"}}"
-oc delete consolelink ${GIT_NAME_OPS} || true
-oc get consolelink toolkit-sourcecontrol -o yaml | sed 's/name: toolkit-sourcecontrol/name: toolkit-gitops/' | sed 's/text: ${GIT_NAME}/text: ${GIT_NAME_OPS}/' | oc apply -f -
+
+oc apply -f - <<EOF
+apiVersion: console.openshift.io/v1
+kind: ConsoleLink
+metadata:
+  annotations:
+  labels:
+    group: catalyst-tools
+    grouping: garage-cloud-native-toolkit
+  name: toolkit-gitops
+spec:
+  applicationMenu:
+    imageURL: $(oc get consolelink toolkit-sourcecontrol -o jsonpath='{.spec.applicationMenu.imageURL}')
+    section: Cloud-Native Toolkit
+  href: ${GIT_URL_OPS}
+  location: ApplicationMenu
+  text: ${GIT_NAME_OPS}
+EOF
