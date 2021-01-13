@@ -16,7 +16,7 @@
     ```
 
 1. Login into OpenShift using `oc`
-If using IBM Cloud cluster then login with your IBM account email and IAM API Key or Token, if using a cluster that was configure with the workshop scripts outside IBM Cloud then use `user1` or respective assigned username
+    - If using IBM Cloud cluster then login with your IBM account email and IAM API Key or Token, if using a cluster that was configure with the workshop scripts outside IBM Cloud then use `user1` or respective assigned username
     ```bash
     oc login $OCP_URL -u $USERNAME -p password
     ```
@@ -34,17 +34,20 @@ If using IBM Cloud cluster then login with your IBM account email and IAM API Ke
     ```bash
     GIT_URL=http://${USERNAME}:password@$(oc get route -n tools gogs --template='{{.spec.host}}')/$USERNAME/app
     echo GIT_URL=${GIT_URL}
+
     ```
 
 1. Clone the git repository and change directory
     ```bash
     git clone $GIT_URL
     cd app
+
     ```
 
 1. Create a project/namespace using your username as prefix, and `-dev` and suffix
     ```
     oc sync $USERNAME-dev --dev
+
     ```
 
 1. Create a pipeline for the application
@@ -79,25 +82,17 @@ If using IBM Cloud cluster then login with your IBM account email and IAM API Ke
     git add .
     git commit -m "update readme"
     git push -u origin master
+
     ```
 
 1. Verify that a new Pipeline starts succesfully
 
 
-1. Verify that the App manifests are being updated in the `gitops` repo in the git account `toolkit` under the `qa` branch.
+1. Verify that the App manifests are being updated in the `gitops` repo in the git account `toolkit` under the `qa` directory.
+    - Open Git Ops from Console Link
+    - Select toolkit/gitops git repository
 
-1. Promote the application from DEV to QA using gitops
-    ```bash
-    oc sync $USERNAME-qa
-    ```
-
-1. Select ArgoCD from the Console Link and login using OpenShift login
-
-1. Filter by namespace `$USERNAME-qa`
-
-1. In ArgoCD UI select the application `qa-$USERNAME-app` in Argo, click `SYNC` if the app is not synchronized and verify that is OK
-
-1. In OpenShift Console switch to project `$USERNAME-qa` and open the application.
+1. Congradulations you finished this activity, continue with [activity-2](../activity-2) to learn about GitOps and ArgoCD
 
 
 
