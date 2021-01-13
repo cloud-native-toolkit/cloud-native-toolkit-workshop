@@ -4,10 +4,10 @@ This repository contains the assets to assist individuals giving workshops using
 
 ## Table of Contents
 
-| Activities                   | Description                                | Status        |
-| ---------------------------- | ------------------------------------------ | ------------- |
-| [activity-1](./activity-1/)  | Deploy an Application using CI Pipelines with Tekton           | In Progress     |
-| [activity-2](./activity-2/)  | Promote an Application using CD with GitOps        | In Progress   |
-| [activity-3](./activity-3/)  | Deploy a 3 tier Microservice suing React, Node.js, and Java    | In Progress   |
-| [activity-4](./activity-4/)  | Deploy an Operator using DevOps              | Backlog       |
+| Activities                   | Description                                                    | Status        |
+| ---------------------------- | -------------------------------------------------------------- | ------------- |
+| [activity-1](./activity-1/)  | Deploy an Application using CI Pipelines with Tekton           | Stable        |
+| [activity-2](./activity-2/)  | Promote an Application using CD with GitOps                    | Stable        |
+| [activity-3](./activity-3/)  | Deploy a 3 tier Microservice using React, Node.js, and Java    | In Progress   |
+| [activity-4](./activity-4/)  | Deploy an Operator using CICD and GitOps                       | Backlog       |
 
