@@ -12,4 +12,6 @@ This repository contains the assets to assist individuals giving workshops using
 | activity-4                   | Deploy Operators using CICD and GitOps                         | Backlog       |
 | activity-5                   | Application Modernization DevOps, Monolith to Container        | Backlog       |
 | activity-6                   | DevOps with Cloud Pak for Integration                          | Backlog       |
-| activity-7                   | ODO and CodeReadyWorkSpaces Developer Workflows                     | Backlog       |
+| activity-7                   | ODO and CodeReadyWorkSpaces Developer Workflows                | Backlog       |
+| activity-8                   | Observability and Security with OpenShift Service Mesh (Istio) | Backlog       |
+| activity-9                   | Event Driven Application using OpenShift Serverles (Kantive)   | Backlog       |
