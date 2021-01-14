@@ -46,7 +46,7 @@
 
 1. Create a project/namespace using your username as prefix, and `-dev` and suffix
     ```
-    oc sync $TOOLKIT_USERNAME-dev --dev
+    oc sync $TOOLKIT_USERNAME-dev
 
     ```
 
