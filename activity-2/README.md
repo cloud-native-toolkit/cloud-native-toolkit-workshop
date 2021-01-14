@@ -1,4 +1,4 @@
-# Workshop: Deploying an Application
+# Workshop:Activity-2: Promoting an Application
 
 1. Prerequisites
     - Complete [activity-1](../activity1).

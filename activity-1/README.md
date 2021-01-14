@@ -1,4 +1,4 @@
-# Workshop: Deploying an Application
+# Workshop:Activity-1: Deploying an Application
 
 1. Prerequisites
     - The instructor should setup activity using [SETUP.md](./SETUP.md)
