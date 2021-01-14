@@ -5,7 +5,7 @@
 - Create an OpenShift Cluster for example:
   - Using docs from [cloudnativetoolkit.dev](https://cloudnativetoolkit.dev/getting-started-day-0/plan-installation/multi-cloud)
   - Using 8 hrs free Cluster on [IBM Open Labs](https://developer.ibm.com/openlabs/openshift) select lab 6 `Bring Your Own Application`
-
+  - Internal DTE Infrastructure to [IBM VPN](https://ccp-ui.csplab.intranet.ibm.com/ ) or [IBM CSPLAB](https://ccp-ui.apps.labprod.ocp.csplab.local/)
 ### 2. Install IBM Cloud Native Toolkit
 
 - Use one of the install options for example the [Quick Install](https://cloudnativetoolkit.dev/getting-started-day-0/install-toolkit/quick-install)
