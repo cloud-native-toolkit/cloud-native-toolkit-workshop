@@ -66,7 +66,6 @@
 1. Review the Pipeline Tasks/Stages
     - Test
     - Open SonarQube from Console Link
-    - Open PACT from Console Link
     - Open Artifactory from Console Link
     - Open Registry from Console Link
 
