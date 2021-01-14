@@ -60,7 +60,7 @@
     cat > staging/user1/app/values.yaml <<EOF
     global: {}
     app:
-     replicaCount: 2
+      replicaCount: 2
     EOF
     git diff
 
