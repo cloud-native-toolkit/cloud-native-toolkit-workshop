@@ -57,7 +57,11 @@
 1. Propose a change for the Application in **STAGING**
     - Update the replica count and create a new git branch in remote repo
     ```bash
-    sed -i 's/replicaCount: 1/replicaCount: 2/' staging/user1/app/values.yaml
+    cat > staging/user1/app/values.yaml <<EOF
+    global: {}
+    app:
+     replicaCount: 2
+    EOF
     git diff
 
     git add .
