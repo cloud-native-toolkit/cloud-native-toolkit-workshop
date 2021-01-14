@@ -19,8 +19,9 @@ pushd "${TMP_DIR}"
 for (( c=1; c<=COUNT_USERS; c++ )); do
   #create username and password for each user
   echo "${USER_PREFIX}${c}:${HTPASSWD_HASH}" >> ${HTPASSWD_FILENAME}
-  for e in test qa staging prod; do
+  for e in qa staging production; do
   oc adm policy add-cluster-role-to-group system:image-puller "system:serviceaccounts:${USER_PREFIX}${c}-${e}"
+  oc create ns user${c}-${e}
   oc policy add-role-to-user admin user${c} -n user${c}-${e}
   done
 done
