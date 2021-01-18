@@ -77,7 +77,7 @@
     - Click **New Pull Request**
     - Select from `compare` dropdown the branch `$TOOLKIT_USERNAME-pr1`
     - Enter a title like `Update replica count for app in namespace $TOOLKIT_USERNAME`
-    - Envet a Comment like `We need more instances business is growing Yay!`
+    - Enter a Comment like `We need more instances business is growing Yay!`
     - click **Create Pull Request**
 
 1. Review the PR follow change management process established by your team.
