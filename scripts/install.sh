@@ -24,6 +24,7 @@ INSTALL_SCRIPTS="00-git-install.sh \
 
 STARTTIME=$(date +%s)
 for i in ${INSTALL_SCRIPTS}; do
+ echo "Running script ${INSTALL_BASE_URL}/${i}"
  curl -sL "${INSTALL_BASE_URL}/${i}" | bash
 done
 DURATION=$(($(date +%s) - $STARTTIME))
