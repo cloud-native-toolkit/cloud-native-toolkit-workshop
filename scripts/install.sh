@@ -2,8 +2,8 @@
 
 set -euo pipefail
 
-INSTALL_REPO=${INSTALL_REPO:-ibm-garage-cloud/cloud-native-toolkit-workshop}
 INSTALL_BRANCH=${INSTALL_BRANCH:-main}
+INSTALL_REPO=${INSTALL_REPO:-ibm-garage-cloud/cloud-native-toolkit-workshop}
 
 # Run this script like this "curl -sfL workshop.cloudnativetoolkit.dev | sh -"
 
