@@ -13,7 +13,8 @@ GIT_ORG=${GIT_ORG:-toolkit}
 GIT_REPO=${GIT_REPO:-gitops}
 TOOLKIT_GITOPS_PATH_QA=${TOOLKIT_GITOPS_PATH_QA:-qa}
 TOOLKIT_GITOPS_PATH_STAGING=${TOOLKIT_GITOPS_PATH_STAGING:-staging}
-COUNT_USERS=${COUNT_USERS:-15}
+PROJECT_COUNT=${PROJECT_COUNT:-15}
+PROJECT_PREFIX=${PROJECT_PREFIX:-project}
 GIT_CRED_USERNAME=${GIT_CRED_USERNAME:-toolkit}
 GIT_CRED_PASSWORD=${GIT_CRED_PASSWORD:-toolkit}
 GIT_GITOPS_URL="${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/${GIT_REPO}.git"
@@ -52,14 +53,14 @@ argocd-config:
   project: toolkit-${i}
   applicationTargets:
 EOF
-for (( c=1; c<=COUNT_USERS; c++ )); do
+for (( c=1; c<=PROJECT_COUNT; c++ )); do
   cat >> "${i}/values.yaml" <<EOF
     - targetRevision: master
       createNamespace: true
-      targetNamespace: user${c}-${i}
+      targetNamespace: ${PROJECT_PREFIX}${c}-${i}
       applications:
-        - name: ${i}-user${c}-app
-          path: ${i}/user${c}/app
+        - name: ${i}-${PROJECT_PREFIX}${c}-app
+          path: ${i}/${PROJECT_PREFIX}${c}/app
           type: helm
 EOF
 done
@@ -88,7 +89,8 @@ GIT_REPOS="https://github.com/IBM/template-go-gin,app \
            https://github.com/IBM/template-go-gin,go-gin \
            https://github.com/ibm-garage-cloud/inventory-management-svc-solution,inventory-management-svc-solution \
            https://github.com/ibm-garage-cloud/inventory-management-bff-solution,inventory-management-bff-solution \
-           https://github.com/ibm-garage-cloud/inventory-management-ui-solution,inventory-management-ui-solution"
+           https://github.com/ibm-garage-cloud/inventory-management-ui-solution,inventory-management-ui-solution \
+           https://github.com/ibm-cloud-architecture/appmod-liberty-toolkit"
 
 
 for i in ${GIT_REPOS}; do
@@ -116,8 +118,10 @@ git config --local user.email "toolkit@cloudnativetoolkit.dev"
 git config --local user.name "IBM Cloud Native Toolkit"
 git add .
 git commit -m "initial commit"
+git tag 1.0.0
 git remote add downstream ${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/$2.git
 git push downstream master
+git push --tags downstream
 
 popd
 unset IFS

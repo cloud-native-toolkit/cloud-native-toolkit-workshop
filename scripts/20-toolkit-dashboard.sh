@@ -22,7 +22,8 @@ GIT_REPOS="https://github.com/IBM/template-node-react,node-react \
            https://github.com/IBM/template-go-gin,go-gin \
            https://github.com/ibm-garage-cloud/inventory-management-svc-solution,inventory-management-svc-solution \
            https://github.com/ibm-garage-cloud/inventory-management-bff-solution,inventory-management-bff-solution \
-           https://github.com/ibm-garage-cloud/inventory-management-ui-solution,inventory-management-ui-solution"
+           https://github.com/ibm-garage-cloud/inventory-management-ui-solution,inventory-management-ui-solution \
+           https://github.com/ibm-cloud-architecture/appmod-liberty-toolkit"
 
 
 TMP_DIR=$(mktemp -d)

@@ -12,17 +12,20 @@ TOOLKIT_PROVIDER_NAME=${TOOLKIT_PROVIDER_NAME:-ibm-toolkit}
 HTPASSWD_HASH='$2y$05$.juxXTUzqc5wzUlCcZl1puKGI9YDOLhFV7.HFtYi1GdD.DKG32D0.'
 COUNT_USERS=${COUNT_USERS:-15}
 USER_PREFIX=${USER_PREFIX:-user}
+PROJECT_PREFIX=${PROJECT_PREFIX:-project}
 
 TMP_DIR=$(mktemp -d)
 pushd "${TMP_DIR}"
 
 for (( c=1; c<=COUNT_USERS; c++ )); do
-  #create username and password for each user
+  # create username and password for each user
   echo "${USER_PREFIX}${c}:${HTPASSWD_HASH}" >> ${HTPASSWD_FILENAME}
   for e in qa staging production; do
-  oc adm policy add-cluster-role-to-group system:image-puller "system:serviceaccounts:${USER_PREFIX}${c}-${e}"
-  oc create ns user${c}-${e}
-  oc policy add-role-to-user admin user${c} -n user${c}-${e}
+  # create a new namespace for each user and env
+  oc create new-project ${PROJECT_PREFIX}${c}-${e}
+  oc adm policy add-cluster-role-to-group system:image-puller "system:serviceaccounts:${PROJECT_PREFIX}${c}-${e}"
+  # make user admin of the new project
+  oc policy add-role-to-user admin ${USER_PREFIX}${c} -n ${PROJECT_PREFIX}${c}-${e}
   done
 done
 
