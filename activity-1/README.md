@@ -10,9 +10,10 @@
     - OpenShift Console URL (OCP_CONSOLE_URL)
     - The username and password for OpenShift and Git Server (default values are user1, user2, etc.. for users and `password` for password)
 
-1. Set `TOOLKIT_PROJECT` environment variable replace `user1` with assigned usernames
+1. Set `TOOLKIT_PROJECT` environment variable replace `project1` or `projectx` based on user id assigned
     ```bash
     TOOLKIT_USERNAME=user1
+
     ```
 
 1. (Optional for Cluster Admin) Login into OpenShift using `oc`
@@ -24,6 +25,7 @@
 1. Set `TOOLKIT_PROJECT` environment variable replace `project1` with assigned usernames
     ```bash
     TOOLKIT_PROJECT=project1
+
     ```
 
 1. Fork application template git repo
