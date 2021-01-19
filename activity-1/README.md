@@ -72,8 +72,8 @@
 1. Review the Pipeline Tasks/Stages
     - Test
     - Open SonarQube from Console Link
-    - Open Artifactory from Console Link
     - Open Registry from Console Link
+    - Open Artifactory from Console Link
 
 1. Select `Developer` perspective, select project `$TOOLKIT_PROJECT-dev` and then select Topoly from the Console and see the application running
 
