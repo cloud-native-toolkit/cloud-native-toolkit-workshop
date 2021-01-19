@@ -10,7 +10,7 @@
     - OpenShift Console URL (OCP_CONSOLE_URL)
     - The username and password for OpenShift and Git Server (default values are user1, user2, etc.. for users and `password` for password)
 
-1. Set `TOOLKIT_USERNAME` environment variable replace `user1` or `userx` with assigned usernames 
+1. Set `TOOLKIT_USERNAME` environment variable replace `user1` or `userx` with assigned usernames
     ```bash
     TOOLKIT_USERNAME=user1
 
@@ -63,9 +63,8 @@
     ```
     - Enter `userx` as username
     - Enter `password` as token/password
-    - Hit Enter to select branch `master`
     - Use down arrow and select `ibm-golang`
-    - Hit Enter to select `n` for image scan
+    - Hit Enter to select image scan
     - Open the url to see the pipeline running in the OpenShift Console
 
 1. Verify that Pipeline Run completeled succesfully
