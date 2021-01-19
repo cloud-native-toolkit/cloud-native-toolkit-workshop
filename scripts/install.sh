@@ -2,12 +2,12 @@
 
 set -euo pipefail
 
-SCRIPT_DIR=$(dirname "$0")
-SRC_DIR="$(cd "${SCRIPT_DIR}"; pwd -P)"
+INSTALL_BRANCH=${INSTALL_BRANCH:-main}
+INSTALL_REPO=${INSTALL_REPO:-ibm-garage-cloud/cloud-native-toolkit-workshop}
 
 # Run this script like this "curl -sfL workshop.cloudnativetoolkit.dev | sh -"
 
-INSTALL_BASE_URL="https://raw.githubusercontent.com/ibm-garage-cloud/cloud-native-toolkit-workshop/main/scripts"
+INSTALL_BASE_URL="https://raw.githubusercontent.com/${INSTALL_REPO}/${INSTALL_BRANCH}/scripts"
 INSTALL_SCRIPTS="00-git-install.sh \
                  01-git-repos.sh \
                  02-git-users.sh \
@@ -24,6 +24,7 @@ INSTALL_SCRIPTS="00-git-install.sh \
 
 STARTTIME=$(date +%s)
 for i in ${INSTALL_SCRIPTS}; do
+ echo "Running script ${INSTALL_BASE_URL}/${i}"
  curl -sL "${INSTALL_BASE_URL}/${i}" | bash
 done
 DURATION=$(($(date +%s) - $STARTTIME))
