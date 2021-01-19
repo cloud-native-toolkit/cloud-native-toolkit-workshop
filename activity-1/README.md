@@ -93,8 +93,8 @@
 1. Verify that change in Git Server and Git WebHook
     - Open Git Dev from Console Link
     - Navigate to user app git repository
-    - Review the recent change
-    - Review the webhook is present
+    - Review the recent commit
+    - Review the webhook recent delivery
 
 1. Verify that a new Pipeline starts succesfully
 
