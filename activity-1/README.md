@@ -61,7 +61,7 @@
     ```
     oc pipeline --tekton
     ```
-    - Enter `userx` as username
+    - Enter git username (ie user1, user2, etc..)
     - Enter `password` as token/password
     - Use down arrow and select `ibm-golang`
     - Hit Enter to select image scan
