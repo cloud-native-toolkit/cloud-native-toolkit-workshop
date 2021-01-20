@@ -1,4 +1,4 @@
-# Workshop:Activity-2: Promoting an Application
+# Workshop:Activity-3: Deploy a 3 tier Microservice using React, Node.js, and Java
 
 1. Prerequisites
     - The instructor should setup activity using [SETUP.md](../activity-1/SETUP.md)
