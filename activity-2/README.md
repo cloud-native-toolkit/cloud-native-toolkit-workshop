@@ -38,6 +38,11 @@
 
     ```
 
+1. Review the `qa` and `staging` directory in the git repository
+    ```bash
+    tree
+    ```
+
 1. Promote the application from **QA** to **STAGING** by copying the app manifest files using git
     ```bash
     git config --global user.email "${TOOLKIT_USERNAME}@example.com"
