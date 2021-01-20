@@ -28,6 +28,12 @@
 
     ```
 
+1. Create a project/namespace using your project as prefix, and `-dev` and suffix
+    ```
+    oc sync $TOOLKIT_PROJECT-dev
+
+    ```
+
 1. Fork application template git repo
     - Open IBM Cloud Native Toolkit Developer Dashboard from the OpenShift Console
     - Select Starter Kits
@@ -46,14 +52,9 @@
 
 1. Clone the git repository and change directory
     ```bash
+    cd $HOME
     git clone $GIT_URL
     cd app
-
-    ```
-
-1. Create a project/namespace using your username as prefix, and `-dev` and suffix
-    ```
-    oc sync $TOOLKIT_PROJECT-dev
 
     ```
 
