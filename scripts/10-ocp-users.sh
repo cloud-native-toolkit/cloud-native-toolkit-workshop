@@ -22,7 +22,7 @@ for (( c=1; c<=COUNT_USERS; c++ )); do
   echo "${USER_PREFIX}${c}:${HTPASSWD_HASH}" >> ${HTPASSWD_FILENAME}
   for e in qa staging production; do
   # create a new namespace for each user and env
-  oc new-project ${PROJECT_PREFIX}${c}-${e}
+  oc new-project ${PROJECT_PREFIX}${c}-${e} || true
   oc adm policy add-cluster-role-to-group system:image-puller "system:serviceaccounts:${PROJECT_PREFIX}${c}-${e}"
   # make user admin of the new project
   oc policy add-role-to-user admin ${USER_PREFIX}${c} -n ${PROJECT_PREFIX}${c}-${e}
