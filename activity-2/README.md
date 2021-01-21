@@ -73,6 +73,7 @@
     app:
       replicaCount: 2
     EOF
+
     git diff
 
     git add .
