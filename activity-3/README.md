@@ -35,6 +35,7 @@
     - Select Inventory Service (Java)
     - Click Fork
     - Login into GIT Sever using the provided username and password (ie `user1` and `password`)
+    - Click **Fork Repository**
 
 1. Setup environment variable `GIT_URL` for the git url using the value from previous step or as following
     ```bash
@@ -47,7 +48,6 @@
     ```
     oc pipeline --tekton ${GIT_URL}#master -p scan-image=false
     ```
-    - Enter git username (ie user1, user2, etc..) and password `password` if prompted
     - Use down arrow and select `ibm-java-gradle`
     - Open the url to see the pipeline running in the OpenShift Console
 
@@ -57,6 +57,7 @@
     - Select Starter Kits
     - Select Inventory BFF (TypeScript)
     - Click Fork
+    - Click **Fork Repository**
 
 
 1. Setup environment variable `GIT_URL` for the git url using the value from previous step or as following
@@ -78,6 +79,7 @@
     - Select Starter Kits
     - Select Inventory UI (React)
     - Click Fork
+    - Click **Fork Repository**
 
 1. Setup environment variable `GIT_URL` for the git url using the value from previous step or as following
     ```bash
