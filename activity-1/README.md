@@ -1,14 +1,12 @@
 # Workshop:Activity-1: Deploying an Application
 
 1. Prerequisites
-    - The instructor should setup activity using [SETUP.md](./SETUP.md)
-    - [Setup Terminal](../CLI.md))
-    - Cloud Native Toolkit [igc](https://www.npmjs.com/package/@ibmgaragecloud/cloud-native-toolkit-cli) CLI
-    - OpenShift [oc](https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/) CLI 4.5+
+    - The instructor should [Setup Workshop Environment](../README.md#setup-the-workshop-environment)
+    - The student should [Setup CLI and Terminal Shell](../README.md#4-setup-cli-and-terminal-shell)
 
 1. Instructor will provide the following info:
     - OpenShift Console URL (OCP_CONSOLE_URL)
-    - The username and password for OpenShift and Git Server (default values are user1, user2, etc.. for users and `password` for password)
+    - The username and password for OpenShift and Git Server (default values are user1, user2, etc.. for users and `password` for password).
 
 1. Set `TOOLKIT_USERNAME` environment variable replace `user1` or `userx` with assigned usernames
     ```bash
@@ -16,7 +14,7 @@
 
     ```
 
-1. (Optional for Cluster Admin) Login into OpenShift using `oc`
+1. **(Skip if using KubeAdmin or IBM Cloud)** Login into OpenShift using `oc`
     - If using IBM Cloud cluster then login with your IBM account email and IAM API Key or Token, if using a cluster that was configure with the workshop scripts outside IBM Cloud then use `user1` or respective assigned username, and the password is `password`
     ```bash
     oc login $OCP_URL -u $TOOLKIT_USERNAME -p password
