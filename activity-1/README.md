@@ -41,7 +41,7 @@
     - Click Fork
     - Login into GIT Sever using the provided username and password (ie `user1` and `password`)
     - **IMPORTANT**: Rename Repository Name to `app`
-    - Copy the HTTP url to the new git repository
+    - Click **Fork Repository**
 
 1. Setup environment variable `GIT_URL` for the git url using the value from previous step or as following
     ```bash
@@ -62,8 +62,6 @@
     ```
     oc pipeline --tekton
     ```
-    - Enter git username (ie user1, user2, etc..)
-    - Enter `password` as token/password
     - Use down arrow and select `ibm-golang`
     - Hit Enter to select image scan
     - Open the url to see the pipeline running in the OpenShift Console
