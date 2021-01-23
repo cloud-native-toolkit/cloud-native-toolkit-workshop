@@ -21,7 +21,7 @@
     - Select the application `master-qa-${TOOLKIT_PROJECT}-app` (ie master-qa-project1-app)
 
 1. Verify Application is running in the QA namespace correspondin to your username `${TOOLKIT_PROJECT}-qa`
-    - Select `Developer` perspective, select project `${TOOLKIT_PROJECT}-qa` and then select Topology from the Console and see the application running
+    - Select **Developer** perspective, select project `${TOOLKIT_PROJECT}-qa` and then select **Topology** from the Console and see the application running
 
 1. Setup environment variable `GIT_OPS_URL` for the git url using the value from previous step or as following
     ```bash
@@ -40,7 +40,8 @@
 
 1. Review the `qa` and `staging` directory in the git repository
     ```bash
-    tree
+    ls -l qa/
+    ls -l staging/
     ```
 
 1. Promote the application from **QA** to **STAGING** by copying the app manifest files using git
@@ -63,7 +64,7 @@
     - Click **Refresh**
 
 1. Verify Application is running in the **STAGING** namespace correspondin to your username `${TOOLKIT_PROJECT}-qa`
-    - Select `Developer` perspective, select project `${TOOLKIT_PROJECT}-staging` and then select Topology from the Console and see the application running
+    - Select **Developer** perspective, select project `${TOOLKIT_PROJECT}-staging` and then select **Topology** from the Console and see the application running
 
 1. Propose a change for the Application in **STAGING**
     - Update the replica count and create a new git branch in remote repo
@@ -99,4 +100,6 @@
 1. Review that application is scales out
     - Review in ArgoCD UI, it takes about 4 minutes to sync, you can click **Refresh**
     - Review in OpenShift Console, click the Deployment circle details shows 2 Pods.
+
+1. Congradulations you finished this activity, continue with [activity-3](../activity-3/README.md) to deploy an application compose of 3 microservices.
 

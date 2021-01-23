@@ -35,14 +35,15 @@
 1. Fork Inventory Sample Application Java
     - Open Developer Dashboard from the OpenShift Console
     - Select Starter Kits
-    - Select Inventory Service (Java)
+    - Select **Inventory Service** (Java)
     - Click Fork
     - Login into GIT Sever using the provided username and password (ie `user1` and `password`)
     - Click **Fork Repository**
 
 1. Setup environment variable `GIT_URL` for the git url using the value from previous step or as following
     ```bash
-    GIT_URL=http://${TOOLKIT_USERNAME}:password@$(oc get route -n tools gogs --template='{{.spec.host}}')/$TOOLKIT_USERNAME/inventory-management-svc-solution
+    GIT_REPO=inventory-management-svc-solution
+    GIT_URL=http://${TOOLKIT_USERNAME}:password@$(oc get route -n tools gogs --template='{{.spec.host}}')/${TOOLKIT_USERNAME}/${GIT_REPO}
     echo GIT_URL=${GIT_URL}
 
     ```
@@ -51,21 +52,21 @@
     ```
     oc pipeline --tekton ${GIT_URL}#master -p scan-image=false
     ```
-    - Use down arrow and select `ibm-java-gradle`
     - Open the url to see the pipeline running in the OpenShift Console
 
 
 1. Fork Inventory Sample Application TypeScript
     - Open Developer Dashboard from the OpenShift Console
     - Select Starter Kits
-    - Select Inventory BFF (TypeScript)
+    - Select **Inventory BFF** (TypeScript)
     - Click Fork
     - Click **Fork Repository**
 
 
 1. Setup environment variable `GIT_URL` for the git url using the value from previous step or as following
     ```bash
-    GIT_URL=http://${TOOLKIT_USERNAME}:password@$(oc get route -n tools gogs --template='{{.spec.host}}')/$TOOLKIT_USERNAME/inventory-management-bff-solution
+    GIT_REPO=inventory-management-bff-solution
+    GIT_URL=http://${TOOLKIT_USERNAME}:password@$(oc get route -n tools gogs --template='{{.spec.host}}')/${TOOLKIT_USERNAME}/${GIT_REPO}
     echo GIT_URL=${GIT_URL}
 
     ```
@@ -74,19 +75,19 @@
     ```
     oc pipeline --tekton ${GIT_URL}#master -p scan-image=false
     ```
-    - Use down arrow and select `ibm-nodejs`
     - Open the url to see the pipeline running in the OpenShift Console
 
 1. Fork Inventory Sample Application React
     - Open Developer Dashboard from the OpenShift Console
     - Select Starter Kits
-    - Select Inventory UI (React)
+    - Select **Inventory UI** (React)
     - Click Fork
     - Click **Fork Repository**
 
 1. Setup environment variable `GIT_URL` for the git url using the value from previous step or as following
     ```bash
-    GIT_URL=http://${TOOLKIT_USERNAME}:password@$(oc get route -n tools gogs --template='{{.spec.host}}')/$TOOLKIT_USERNAME/inventory-management-ui-solution
+    GIT_REPO=inventory-management-ui-solution
+    GIT_URL=http://${TOOLKIT_USERNAME}:password@$(oc get route -n tools gogs --template='{{.spec.host}}')/${TOOLKIT_USERNAME}/${GIT_REPO}
     echo GIT_URL=${GIT_URL}
 
     ```
@@ -95,7 +96,6 @@
     ```
     oc pipeline --tekton ${GIT_URL}#master -p scan-image=false
     ```
-    - Use down arrow and select `ibm-nodejs`
     - Open the url to see the pipeline running in the OpenShift Console
 
 
@@ -109,17 +109,37 @@
 1. Clone the git repository and change directory
     ```bash
     cd $HOME
-    git clone $GIT_OPS_URL
-    cd gitops
+    git clone $GIT_OPS_URL gitops-inventory
+    cd gitops-inventory
 
     ```
 
-1. Review the `qa` and `staging` directory in the git repository
+1. Review the `qa` directory in the git repository, the directory might be empty if the 3 pipelines are not done yet.
     ```bash
-    tree qa/${TOOLKIT_PROJECT}/
+    ls -l qa/${TOOLKIT_PROJECT}/
     ```
 
-1. Promote the application from **QA** to **STAGING** by copying the app manifest files using git
+1. This is a good time for a cofee break fo 15 minutes until all 3 Pipeline Runs are done.
+
+1. Review the `qa` directory in the git repository again
+    ```bash
+    ls -l qa/${TOOLKIT_PROJECT}/
+    ```
+    You should see 3 directories
+    ```bash
+    inventory-management-bff-solution
+    inventory-management-svc-solution
+    inventory-management-ui-solution
+    ```
+
+1. Each directory contains their corresponding yaml manifest files (ie Helm Chart)
+    ```bash
+    ls -l inventory-management-bff-solution
+    ls -l inventory-management-svc-solution
+    ls -l inventory-management-ui-solution
+    ```
+
+1. Promote the application from **QA** to **STAGING** creating a manifest yaml (ie Helm Chart) that leverage the Cloud Native Toolkit chart `argocd-config` to automate the creation of multiple ArgoCD Applications.
     ```bash
     git config --local user.email "${TOOLKIT_USERNAME}@example.com"
     git config --local user.name "${TOOLKIT_USERNAME}"
@@ -186,8 +206,9 @@
 
 1. Review the Application in OpenShift
     - Switch to Developer perpective
+    - Select **Topology** from the menu
     - Switch to project `${TOOLKIT_PROJECT}-qa` (ie project1-qa)
-    - Open the Application from the JavaScript UI and make sure the stocks show up in the browser
+    - Open the Application from the JavaScript UI and make sure the stocks show up in the browser. Click on the route url on from the ui deployment, or the link on the circle.
 
 
 

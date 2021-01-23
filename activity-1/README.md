@@ -33,7 +33,7 @@
     ```
 
 1. Fork application template git repo
-    - Open IBM Cloud Native Toolkit Developer Dashboard from the OpenShift Console
+    - Open Developer Dashboard from the OpenShift Console
     - Select Starter Kits
     - Select One in our case **Go Gin Microservice**
     - Click Fork
@@ -60,8 +60,8 @@
     ```
     oc pipeline --tekton
     ```
-    - Use down arrow and select `ibm-golang`
-    - Hit Enter to select image scan
+    - Use down/up arrow and select `ibm-golang`
+    - Hit Enter to enable image scanning
     - Open the url to see the pipeline running in the OpenShift Console
 
 1. Verify that Pipeline Run completeled succesfully
@@ -72,7 +72,7 @@
     - Open Registry from Console Link
     - Open Artifactory from Console Link
 
-1. Select `Developer` perspective, select project `$TOOLKIT_PROJECT-dev` and then select Topoly from the Console and see the application running
+1. Select **Developer** perspective, select project `$TOOLKIT_PROJECT-dev` and then select **Topology** from the Console and verify the application running
 
 1. Open the application route url and try out the application using the swagger UI
 
@@ -99,7 +99,7 @@
     - Open Git Ops from Console Link
     - Select toolkit/gitops git repository
 
-1. Congradulations you finished this activity, continue with [activity-2](../activity-2) to learn about GitOps and ArgoCD
+1. Congradulations you finished this activity, continue with [activity-2](../activity-2/README.md) to learn about GitOps and ArgoCD
 
 
 
