@@ -119,7 +119,7 @@
     ls -l qa/${TOOLKIT_PROJECT}/
     ```
 
-1. This is a good time for a cofee break fo 15 minutes until all 3 Pipeline Runs are done.
+1. This is a good time for a coffee break fo 15 minutes until all 3 Pipeline Runs are done.
 
 1. Review the `qa` directory in the git repository again
     ```bash
