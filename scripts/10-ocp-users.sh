@@ -2,9 +2,6 @@
 
 set -euo pipefail
 
-SCRIPT_DIR=$(dirname "$0")
-SRC_DIR="$(cd "${SCRIPT_DIR}"; pwd -P)"
-
 HTPASSWD_FILENAME=${HTPASSWD_FILENAME:-htpasswd}
 TOOLKIT_SECRET=${TOOLKIT_SECRET:-ibm-toolkit-htpasswd}
 TOOLKIT_PROVIDER_NAME=${TOOLKIT_PROVIDER_NAME:-ibm-toolkit}

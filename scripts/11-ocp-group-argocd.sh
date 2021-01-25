@@ -2,9 +2,6 @@
 
 set -euo pipefail
 
-SCRIPT_DIR=$(dirname "$0")
-SRC_DIR="$(cd "${SCRIPT_DIR}"; pwd -P)"
-
 COUNT_USERS=${COUNT_USERS:-15}
 USER_PREFIX=${USER_PREFIX:-user}
 

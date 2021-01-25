@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-SCRIPT_DIR=$(dirname "$0")
-SRC_DIR="$(cd "${SCRIPT_DIR}"; pwd -P)"
 
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 GIT_PROTOCOL=${GIT_PROTOCOL:-http}
