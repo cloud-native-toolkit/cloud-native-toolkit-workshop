@@ -2,9 +2,6 @@
 
 set -euo pipefail
 
-SCRIPT_DIR=$(dirname "$0")
-SRC_DIR="$(cd "${SCRIPT_DIR}"; pwd -P)"
-
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 TOOLKIT_GITOPS_APP=${TOOLKIT_GITOPS_APP:-toolkit}
 TOOLKIT_GITOPS_HOST=${TOOLKIT_GITOPS_HOST:-gogs.tools}

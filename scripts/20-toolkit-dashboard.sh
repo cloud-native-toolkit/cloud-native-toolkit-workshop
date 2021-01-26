@@ -2,9 +2,6 @@
 
 set -euo pipefail
 
-SCRIPT_DIR=$(dirname "$0")
-SRC_DIR="$(cd "${SCRIPT_DIR}"; pwd -P)"
-
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 TOOLKIT_DASHBOARD_CONFIG=${TOOLKIT_DASHBOARD_CONFIG:-developer-dashboard-config}
 TOOLKIT_DASHBOARD_DEPLOY=${TOOLKIT_DASHBOARD_DEPLOY:-dashboard-developer-dashboard}

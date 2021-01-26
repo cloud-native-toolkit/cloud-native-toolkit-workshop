@@ -2,9 +2,6 @@
 
 set -euo pipefail
 
-SCRIPT_DIR=$(dirname "$0")
-SRC_DIR="$(cd "${SCRIPT_DIR}"; pwd -P)"
-
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 TOOLKIT_GROUP=${TOOLKIT_GROUP:-ibm-toolkit-users}
 TOOLKIT_TOOLS_ROLE=${TOOLKIT_TOOLS_ROLE:-ibm-toolkit-view}

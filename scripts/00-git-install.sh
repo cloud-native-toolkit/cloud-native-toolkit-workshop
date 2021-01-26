@@ -2,9 +2,6 @@
 
 set -euo pipefail
 
-SCRIPT_DIR=$(dirname "$0")
-SRC_DIR="$(cd "${SCRIPT_DIR}"; pwd -P)"
-
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 GOGS_YAML=${GOGS_YAML:-https://raw.githubusercontent.com/csantanapr/gogs/workshop/gogs-template.yaml}
 OCP_DEFAULT_APP_DOMAIN=$(oc get ingresses.config.openshift.io cluster -o template={{.spec.domain}})
