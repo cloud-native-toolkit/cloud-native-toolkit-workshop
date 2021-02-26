@@ -84,7 +84,7 @@ GIT_REPOS="https://github.com/IBM/template-go-gin,app \
            https://github.com/IBM/template-node-typescript,node-typescript \
            https://github.com/IBM/template-java-spring,java-spring \
            https://github.com/IBM/template-go-gin,go-gin \
-           https://github.com/ibm-garage-cloud/template-quarkus,java-quarkus \
+           https://github.com/IBM/template-quarkus,java-quarkus \
            https://github.com/ibm-garage-cloud/inventory-management-svc-solution,inventory-management-svc-solution \
            https://github.com/ibm-garage-cloud/inventory-management-bff-solution,inventory-management-bff-solution \
            https://github.com/ibm-garage-cloud/inventory-management-ui-solution,inventory-management-ui-solution \
