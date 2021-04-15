@@ -3,14 +3,13 @@
 set -uo pipefail
 
 
-COUNT_USERS=${COUNT_USERS:-15}
 USER_PREFIX=${USER_PREFIX:-user}
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 TOOLKIT_SECRET=${TOOLKIT_SECRET:-ibm-toolkit-htpasswd}
 TOOLKIT_GROUP=${TOOLKIT_GROUP:-ibm-toolkit-users}
 TOOLKIT_TOOLS_ROLE=${TOOLKIT_TOOLS_ROLE:-ibm-toolkit-view}
 TOOLKIT_CRD_ROLE=${TOOLKIT_CRD_ROLE:-ibm-toolkit-crd-view}
-COUNT_USERS=${COUNT_USERS:-15}
+USER_COUNT=${USER_COUNT:-15}
 USER_PREFIX=${USER_PREFIX:-user}
 PROJECT_PREFIX=${PROJECT_PREFIX:-project}
 TOOLKIT_DASHBOARD_CONFIG=${TOOLKIT_DASHBOARD_CONFIG:-developer-dashboard-config}
@@ -27,14 +26,20 @@ oc delete secret ${TOOLKIT_SECRET} -n openshift-configure
 
 # TODO remove htpasswd entry from OAuth cluster
 
-for (( c=1; c<=COUNT_USERS; c++ )); do
+for (( c=1; c<=USER_COUNT; c++ )); do
+  # zero pad ids 1-9
+  printf -v id "%02g" ${c}
+
   for e in dev qa staging production; do
-  oc delete project ${PROJECT_PREFIX}${c}-${e}
+  oc delete project ${PROJECT_PREFIX}${id}-${e}
   done
 done
 
-for (( c=1; c<=COUNT_USERS; c++ )); do
-  oc adm groups remove-users argocd-admins ${USER_PREFIX}${c}
+for (( c=1; c<=USER_COUNT; c++ )); do
+  # zero pad ids 1-9
+  printf -v id "%02g" ${c}
+
+  oc adm groups remove-users argocd-admins ${USER_PREFIX}${id}
 done
 
 oc delete group ${TOOLKIT_GROUP}

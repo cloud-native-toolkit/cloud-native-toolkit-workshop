@@ -11,19 +11,20 @@ GIT_DEFAULT_PASSWORD=${GIT_DEFAULT_PASSWORD:-password}
 GIT_CRED_USERNAME=${GIT_CRED_USERNAME:-toolkit}
 GIT_CRED_PASSWORD=${GIT_CRED_PASSWORD:-toolkit}
 ACCESS_TOKEN=$(curl -s -u "${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}" "${GIT_URL}/api/v1/users/${GIT_CRED_USERNAME}/tokens" | jq -r '.[0].sha1')
-COUNT_USERS=${COUNT_USERS:-15}
+USER_COUNT=${USER_COUNT:-15}
 GIT_ORG=${GIT_ORG:-toolkit}
 GIT_REPO=${GIT_REPO:-gitops}
 
 
-for (( c=1; c<=COUNT_USERS; c++ )); do
-
-  response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/users/user${c}")
+for (( c=1; c<=USER_COUNT; c++ )); do
+  # zero pad ids 1-9
+  printf -v id "%02g" ${c}
+  response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/users/user${id}")
   if [[ "${response}" == "200" ]]; then
-    echo "git user already exists user${c}"
+    echo "git user already exists user${id}"
     continue
   fi
-  echo "Creating user user${c} on Git Server ${GIT_URL}"
-  curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"username\": \"user${c}\", \"password\": \"${GIT_DEFAULT_PASSWORD}\", \"email\": \"user${c}@cloudnativetoolkit.dev\" }" "${GIT_URL}/api/v1/admin/users"
-  curl -X PUT -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" "${GIT_URL}/api/v1/repos/${GIT_ORG}/${GIT_REPO}/collaborators/user${c}"
+  echo "Creating user user${id} on Git Server ${GIT_URL}"
+  curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"username\": \"user${id}\", \"password\": \"${GIT_DEFAULT_PASSWORD}\", \"email\": \"user${id}@cloudnativetoolkit.dev\" }" "${GIT_URL}/api/v1/admin/users"
+  curl -X PUT -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" "${GIT_URL}/api/v1/repos/${GIT_ORG}/${GIT_REPO}/collaborators/user${id}"
 done

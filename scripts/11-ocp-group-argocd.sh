@@ -2,11 +2,13 @@
 
 set -euo pipefail
 
-COUNT_USERS=${COUNT_USERS:-15}
+USER_COUNT=${USER_COUNT:-15}
 USER_PREFIX=${USER_PREFIX:-user}
 
-for (( c=1; c<=COUNT_USERS; c++ )); do
-  oc adm groups add-users argocd-admins ${USER_PREFIX}${c}
+for (( c=1; c<=USER_COUNT; c++ )); do
+  # zero pad ids 1-9
+  printf -v id "%02g" ${c}
+  oc adm groups add-users argocd-admins ${USER_PREFIX}${id}
 done
 
 
