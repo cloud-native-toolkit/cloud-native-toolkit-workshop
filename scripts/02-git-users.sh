@@ -14,6 +14,7 @@ ACCESS_TOKEN=$(curl -s -u "${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}" "${GIT_URL
 USER_COUNT=${USER_COUNT:-15}
 GIT_ORG=${GIT_ORG:-toolkit}
 GIT_REPO=${GIT_REPO:-gitops}
+USER_DEMO=${USER_DEMO:-userdemo}
 
 
 for (( c=1; c<=USER_COUNT; c++ )); do
@@ -28,3 +29,13 @@ for (( c=1; c<=USER_COUNT; c++ )); do
   curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"username\": \"user${id}\", \"password\": \"${GIT_DEFAULT_PASSWORD}\", \"email\": \"user${id}@cloudnativetoolkit.dev\" }" "${GIT_URL}/api/v1/admin/users"
   curl -X PUT -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" "${GIT_URL}/api/v1/repos/${GIT_ORG}/${GIT_REPO}/collaborators/user${id}"
 done
+
+# userdemo
+response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/users/${USER_DEMO}")
+if [[ "${response}" == "200" ]]; then
+  echo "git ${USER_DEMO} already exists "
+else
+  echo "Creating user ${USER_DEMO} on Git Server ${GIT_URL}"
+  curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"username\": \"${USER_DEMO}\", \"password\": \"${GIT_DEFAULT_PASSWORD}\", \"email\": \"${USER_DEMO}@cloudnativetoolkit.dev\" }" "${GIT_URL}/api/v1/admin/users"
+  curl -X PUT -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" "${GIT_URL}/api/v1/repos/${GIT_ORG}/${GIT_REPO}/collaborators/${USER_DEMO}"
+fi

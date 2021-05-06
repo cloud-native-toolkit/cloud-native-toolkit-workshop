@@ -8,6 +8,7 @@ TOOLKIT_TOOLS_ROLE=${TOOLKIT_TOOLS_ROLE:-ibm-toolkit-view}
 TOOLKIT_CRD_ROLE=${TOOLKIT_CRD_ROLE:-ibm-toolkit-crd-view}
 USER_COUNT=${USER_COUNT:-15}
 USER_PREFIX=${USER_PREFIX:-user}
+USER_DEMO=${USER_DEMO:-userdemo}
 
 oc get groups ${TOOLKIT_GROUP} &>/dev/null || oc adm groups new ${TOOLKIT_GROUP}
 
@@ -18,6 +19,8 @@ for (( c=1; c<=USER_COUNT; c++ )); do
   oc adm groups add-users ${TOOLKIT_GROUP} ${USER_PREFIX}${id}
 done
 
+#userdemo
+oc adm groups add-users ${TOOLKIT_GROUP} ${USER_DEMO}
 
 # Create Cluster Role
 oc apply -f - <<EOF

@@ -64,6 +64,16 @@ for (( c=1; c<=PROJECT_COUNT; c++ )); do
           type: helm
 EOF
 done
+#userdemo
+  cat >> "${i}/values.yaml" <<EOF
+    - targetRevision: master
+      createNamespace: true
+      targetNamespace: ${PROJECT_PREFIX}demo-${i}
+      applications:
+        - name: ${i}-${PROJECT_PREFIX}demo-app
+          path: ${i}/${PROJECT_PREFIX}demo/app
+          type: helm
+EOF
 done
 
 git init

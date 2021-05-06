@@ -4,6 +4,7 @@ set -euo pipefail
 
 USER_COUNT=${USER_COUNT:-15}
 USER_PREFIX=${USER_PREFIX:-user}
+USER_DEMO=${USER_DEMO:-userdemo}
 
 for (( c=1; c<=USER_COUNT; c++ )); do
   # zero pad ids 1-9
@@ -11,4 +12,6 @@ for (( c=1; c<=USER_COUNT; c++ )); do
   oc adm groups add-users argocd-admins ${USER_PREFIX}${id}
 done
 
+#userdemo
+oc adm groups add-users argocd-admins ${USER_DEMO}
 
