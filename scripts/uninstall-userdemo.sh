@@ -33,20 +33,7 @@ else
 fi
 
 # 10-ocp-users
-TMP_DIR=$(mktemp -d)
-pushd "${TMP_DIR}"
-for (( c=1; c<=USER_COUNT; c++ )); do
-  # zero pad ids 1-9
-  printf -v id "%02g" ${c}
-  # create username and password for each user
-  echo "${USER_PREFIX}${id}:${HTPASSWD_HASH}" >> ${HTPASSWD_FILENAME}
-done
-oc delete secret ${TOOLKIT_SECRET} -n openshift-config 2>/dev/null || true
-oc create secret generic ${TOOLKIT_SECRET} -n openshift-config --from-file=htpasswd=${HTPASSWD_FILENAME}
-for e in dev qa staging production; do
-oc delete project ${PROJECT_PREFIX}demo-${e}
-done
-popd
+# TODO: remove userdemo from htpasswd
 
 # 11-ocp-group=argocd
 oc adm groups remove-users argocd-admins ${USER_DEMO}

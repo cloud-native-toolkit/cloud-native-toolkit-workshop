@@ -34,16 +34,6 @@ oc delete all -l app=gogs
 oc delete secret ${TOOLKIT_SECRET} -n openshift-configure
 
 # TODO remove htpasswd entry from OAuth cluster
-# LDS Check with Carlos if the following is correct
-oc replace -f - <<EOF
-apiVersion: config.openshift.io/v1
-kind: OAuth
-metadata:
-  annotations:
-    release.openshift.io/create-only: "true"
-  name: cluster
-spec: {}
-EOF
 
 for (( c=1; c<=USER_COUNT; c++ )); do
   # zero pad ids 1-9
