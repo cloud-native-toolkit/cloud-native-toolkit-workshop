@@ -51,16 +51,29 @@ argocd-config:
   applicationTargets:
 EOF
 for (( c=1; c<=PROJECT_COUNT; c++ )); do
+  # zero pad ids 1-9
+  printf -v id "%02g" ${c}
+
   cat >> "${i}/values.yaml" <<EOF
     - targetRevision: master
       createNamespace: true
-      targetNamespace: ${PROJECT_PREFIX}${c}-${i}
+      targetNamespace: ${PROJECT_PREFIX}${id}-${i}
       applications:
-        - name: ${i}-${PROJECT_PREFIX}${c}-app
-          path: ${i}/${PROJECT_PREFIX}${c}/app
+        - name: ${i}-${PROJECT_PREFIX}${id}-app
+          path: ${i}/${PROJECT_PREFIX}${id}/app
           type: helm
 EOF
 done
+#userdemo
+  cat >> "${i}/values.yaml" <<EOF
+    - targetRevision: master
+      createNamespace: true
+      targetNamespace: ${PROJECT_PREFIX}demo-${i}
+      applications:
+        - name: ${i}-${PROJECT_PREFIX}demo-app
+          path: ${i}/${PROJECT_PREFIX}demo/app
+          type: helm
+EOF
 done
 
 git init

@@ -3,14 +3,20 @@
 set -uo pipefail
 
 
-COUNT_USERS=${COUNT_USERS:-15}
 USER_PREFIX=${USER_PREFIX:-user}
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 TOOLKIT_SECRET=${TOOLKIT_SECRET:-ibm-toolkit-htpasswd}
 TOOLKIT_GROUP=${TOOLKIT_GROUP:-ibm-toolkit-users}
+SELF_PROVISIONER_GROUP=${SELF_PROVISIONER_GROUP:-ibm-toolkit-self-provisioner}
+ADDITIONAL_USERS_FILE=${ADDITIONAL_USERS_FILE:-}
+ADDITIONAL_USERS_SELF_PROVISIONER=${ADDITIONAL_USERS_SELF_PROVISIONER:-Y}
+SELF_PROVISIONER_GROUP=${SELF_PROVISIONER_GROUP:-ibm-toolkit-self-provisioner}
+TOOLKIT_GROUPS="${TOOLKIT_GROUP} \
+                argocd-admins"
+
 TOOLKIT_TOOLS_ROLE=${TOOLKIT_TOOLS_ROLE:-ibm-toolkit-view}
 TOOLKIT_CRD_ROLE=${TOOLKIT_CRD_ROLE:-ibm-toolkit-crd-view}
-COUNT_USERS=${COUNT_USERS:-15}
+USER_COUNT=${USER_COUNT:-15}
 USER_PREFIX=${USER_PREFIX:-user}
 PROJECT_PREFIX=${PROJECT_PREFIX:-project}
 TOOLKIT_DASHBOARD_CONFIG=${TOOLKIT_DASHBOARD_CONFIG:-developer-dashboard-config}
@@ -21,23 +27,44 @@ TOOLKIT_GITOPS_PATH_STAGING=${TOOLKIT_GITOPS_PATH_STAGING:-staging}
 
 STARTTIME=$(date +%s)
 
+./uninstall-userdemo.sh
+
 oc delete all -l app=gogs
 
 oc delete secret ${TOOLKIT_SECRET} -n openshift-configure
 
 # TODO remove htpasswd entry from OAuth cluster
 
-for (( c=1; c<=COUNT_USERS; c++ )); do
+for (( c=1; c<=USER_COUNT; c++ )); do
+  # zero pad ids 1-9
+  printf -v id "%02g" ${c}
+
   for e in dev qa staging production; do
-  oc delete project ${PROJECT_PREFIX}${c}-${e}
+  oc delete project ${PROJECT_PREFIX}${id}-${e}
   done
 done
 
-for (( c=1; c<=COUNT_USERS; c++ )); do
-  oc adm groups remove-users argocd-admins ${USER_PREFIX}${c}
+for (( c=1; c<=USER_COUNT; c++ )); do
+  # zero pad ids 1-9
+  printf -v id "%02g" ${c}
+
+  oc adm groups remove-users argocd-admins ${USER_PREFIX}${id}
 done
 
+if [[ -f ${ADDITIONAL_USERS_FILE} ]]; then
+  if [[ "${ADDITIONAL_USERS_SELF_PROVISIONER}" == "Y" ]]; then
+    TOOLKIT_GROUPS+=" ${SELF_PROVISIONER_GROUP}"
+  fi
+
+  while read user; do
+    for group in ${TOOLKIT_GROUPS}; do  
+      oc adm groups remove-users ${group} ${user}
+    done
+  done < ${ADDITIONAL_USERS_FILE}
+fi
+
 oc delete group ${TOOLKIT_GROUP}
+oc get groups ${SELF_PROVISIONER_GROUP} &>/dev/null || oc delete group ${SELF_PROVISIONER_GROUP}
 
 oc adm policy remove-role-from-group ${TOOLKIT_TOOLS_ROLE} ${TOOLKIT_GROUP} -n ${TOOLKIT_NAMESPACE}
 oc delete ClusterRole ${TOOLKIT_TOOLS_ROLE}
