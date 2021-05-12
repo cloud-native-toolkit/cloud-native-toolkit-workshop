@@ -9,7 +9,7 @@ GIT_PROTOCOL=${GIT_PROTOCOL:-http}
 GIT_HOST=$(oc get route -n ${TOOLKIT_NAMESPACE} gogs --template='{{.spec.host}}')
 GIT_URL="${GIT_PROTOCOL}://${GIT_HOST}"
 GIT_USER=${GIT_USER:-toolkit}
-ORGINAL_JSON_URL=${ORGINAL_JSON_URL:-https://raw.githubusercontent.com/ibm-garage-cloud/developer-dashboard/main/public/data/links.json}
+ORGINAL_JSON_URL=${ORGINAL_JSON_URL:-https://raw.githubusercontent.com/cloud-native-toolkit/developer-dashboard/main/public/data/links.json}
 
 GIT_REPOS="https://github.com/IBM/template-node-react,node-react \
            https://github.com/IBM/template-node-angular,node-angular \
