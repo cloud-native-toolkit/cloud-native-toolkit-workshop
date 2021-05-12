@@ -17,77 +17,7 @@ GIT_CRED_PASSWORD=${GIT_CRED_PASSWORD:-toolkit}
 GIT_GITOPS_URL="${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/${GIT_REPO}.git"
 ACCESS_TOKEN=$(curl -s -u "${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}" "${GIT_URL}/api/v1/users/${GIT_CRED_USERNAME}/tokens" | jq -r '.[0].sha1')
 
-response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/repos/${GIT_ORG}/${GIT_REPO}")
 
-if [[ "${response}" != "200" ]]; then
-
-echo "creating gitops repo ${GIT_ORG}/${GIT_REPO}.git"
-curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"name\": \"${GIT_REPO}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
-
-
-TMP_DIR=$(mktemp -d)
-pushd "${TMP_DIR}"
-
-mkdir -p "${TOOLKIT_GITOPS_PATH_QA}"
-mkdir -p "${TOOLKIT_GITOPS_PATH_STAGING}"
-
-for i in ${TOOLKIT_GITOPS_PATH_QA} ${TOOLKIT_GITOPS_PATH_STAGING}; do
-cat > "${i}/Chart.yaml" <<EOF
-apiVersion: v2
-version: 0.1.0
-name: project-config-helm
-description: Chart to configure ArgoCD with the {project-name} project and its applications
-
-dependencies:
-- name: argocd-config
-  version: 0.16.0
-  repository: https://ibm-garage-cloud.github.io/toolkit-charts
-EOF
-cat > "${i}/values.yaml" <<EOF
-global: {}
-argocd-config:
-  repoUrl: "http://gogs.tools:3000/toolkit/gitops.git"
-  project: toolkit-${i}
-  applicationTargets:
-EOF
-for (( c=1; c<=PROJECT_COUNT; c++ )); do
-  # zero pad ids 1-9
-  printf -v id "%02g" ${c}
-
-  cat >> "${i}/values.yaml" <<EOF
-    - targetRevision: master
-      createNamespace: true
-      targetNamespace: ${PROJECT_PREFIX}${id}-${i}
-      applications:
-        - name: ${i}-${PROJECT_PREFIX}${id}-app
-          path: ${i}/${PROJECT_PREFIX}${id}/app
-          type: helm
-EOF
-done
-#userdemo
-  cat >> "${i}/values.yaml" <<EOF
-    - targetRevision: master
-      createNamespace: true
-      targetNamespace: ${PROJECT_PREFIX}demo-${i}
-      applications:
-        - name: ${i}-${PROJECT_PREFIX}demo-app
-          path: ${i}/${PROJECT_PREFIX}demo/app
-          type: helm
-EOF
-done
-
-git init
-git config --local user.email "toolkit@cloudnativetoolkit.dev"
-git config --local user.name "IBM Cloud Native Toolkit"
-echo "Edit [qa/value.yaml](./qa/value.yaml) or [staging/value.yaml](./staging/value.yaml) to add more Apps" > README.md
-git add .
-git commit -m "first commit"
-git remote add origin ${GIT_GITOPS_URL}
-git push -u origin master
-
-popd
-
-fi #ends check if repo exits
 
 echo "creating code patterns"
 GIT_REPOS="https://github.com/IBM/template-go-gin,app \
@@ -141,3 +71,85 @@ unset IFS
 done
 
 
+response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/repos/${GIT_ORG}/${GIT_REPO}")
+
+if [[ "${response}" != "200" ]]; then
+
+echo "creating gitops repo ${GIT_ORG}/${GIT_REPO}.git"
+curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"name\": \"${GIT_REPO}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
+
+
+TMP_DIR=$(mktemp -d)
+pushd "${TMP_DIR}"
+
+mkdir -p "${TOOLKIT_GITOPS_PATH_QA}"
+mkdir -p "${TOOLKIT_GITOPS_PATH_STAGING}"
+
+for i in ${TOOLKIT_GITOPS_PATH_QA} ${TOOLKIT_GITOPS_PATH_STAGING}; do
+cat > "${i}/Chart.yaml" <<EOF
+apiVersion: v2
+version: 0.1.0
+name: project-config-helm
+description: Chart to configure ArgoCD with the {project-name} project and its applications
+
+dependencies:
+- name: argocd-config
+  version: 0.16.0
+  repository: https://ibm-garage-cloud.github.io/toolkit-charts
+EOF
+cat > "${i}/values.yaml" <<EOF
+global: {}
+argocd-config:
+  repoUrl: "http://gogs.tools:3000/toolkit/gitops.git"
+  project: toolkit-${i}
+  applicationTargets:
+EOF
+for (( c=1; c<=PROJECT_COUNT; c++ )); do
+  # zero pad ids 1-9
+  printf -v id "%02g" ${c}
+
+  cat >> "${i}/values.yaml" <<EOF
+    - targetRevision: master
+      createNamespace: true
+      targetNamespace: ${PROJECT_PREFIX}${id}-${i}
+      applications:
+        - name: ${i}-${PROJECT_PREFIX}${id}-app
+          path: ${i}/${PROJECT_PREFIX}${id}/app
+          type: helm
+EOF
+done
+
+
+for j in ${GIT_REPOS}; do
+IFS=","
+set $j
+echo "snapshot git repo $1 into $2"
+
+#userdemo app name app
+  cat >> "${i}/values.yaml" <<EOF
+    - targetRevision: master
+      createNamespace: true
+      targetNamespace: ${PROJECT_PREFIX}demo-${i}
+      applications:
+        - name: ${i}-${PROJECT_PREFIX}demo-${2}
+          path: ${i}/${PROJECT_PREFIX}demo/${2}
+          type: helm
+EOF
+
+unset IFS
+done
+
+done
+
+git init
+git config --local user.email "toolkit@cloudnativetoolkit.dev"
+git config --local user.name "IBM Cloud Native Toolkit"
+echo "Edit [qa/value.yaml](./qa/value.yaml) or [staging/value.yaml](./staging/value.yaml) to add more Apps" > README.md
+git add .
+git commit -m "first commit"
+git remote add origin ${GIT_GITOPS_URL}
+git push -u origin master
+
+popd
+
+fi #ends check if repo exits
