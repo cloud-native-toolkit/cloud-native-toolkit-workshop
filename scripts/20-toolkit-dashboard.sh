@@ -9,7 +9,7 @@ GIT_PROTOCOL=${GIT_PROTOCOL:-http}
 GIT_HOST=$(oc get route -n ${TOOLKIT_NAMESPACE} gogs --template='{{.spec.host}}')
 GIT_URL="${GIT_PROTOCOL}://${GIT_HOST}"
 GIT_USER=${GIT_USER:-toolkit}
-ORGINAL_JSON_URL=${ORGINAL_JSON_URL:-https://raw.githubusercontent.com/ibm-garage-cloud/developer-dashboard/main/public/data/links.json}
+ORGINAL_JSON_URL=${ORGINAL_JSON_URL:-https://raw.githubusercontent.com/cloud-native-toolkit/developer-dashboard/main/public/data/links.json}
 
 GIT_REPOS="https://github.com/IBM/template-node-react,node-react \
            https://github.com/IBM/template-node-angular,node-angular \
@@ -19,9 +19,9 @@ GIT_REPOS="https://github.com/IBM/template-node-react,node-react \
            https://github.com/IBM/template-go-gin,go-gin \
            https://github.com/IBM/template-quarkus,java-quarkus \
            https://github.com/IBM/template-liberty,java-liberty \
-           https://github.com/ibm-garage-cloud/inventory-management-svc-solution,inventory-management-svc-solution \
-           https://github.com/ibm-garage-cloud/inventory-management-bff-solution,inventory-management-bff-solution \
-           https://github.com/ibm-garage-cloud/inventory-management-ui-solution,inventory-management-ui-solution \
+           https://github.com/cloud-native-toolkit/inventory-management-svc-solution,inventory-management-svc-solution \
+           https://github.com/cloud-native-toolkit/inventory-management-bff-solution,inventory-management-bff-solution \
+           https://github.com/cloud-native-toolkit/inventory-management-ui-solution,inventory-management-ui-solution \
            https://github.com/ibm-cloud-architecture/appmod-liberty-toolkit,appmod-liberty-toolkit \
            https://github.com/IBM/MAX-Object-Detector,ai-model-object-detector"
 

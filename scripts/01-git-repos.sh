@@ -17,6 +17,60 @@ GIT_CRED_PASSWORD=${GIT_CRED_PASSWORD:-toolkit}
 GIT_GITOPS_URL="${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/${GIT_REPO}.git"
 ACCESS_TOKEN=$(curl -s -u "${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}" "${GIT_URL}/api/v1/users/${GIT_CRED_USERNAME}/tokens" | jq -r '.[0].sha1')
 
+
+
+echo "creating code patterns"
+GIT_REPOS="https://github.com/IBM/template-go-gin,app \
+           https://github.com/IBM/template-node-react,node-react \
+           https://github.com/IBM/template-node-angular,node-angular \
+           https://github.com/IBM/template-graphql-typescript,graphql-typescript \
+           https://github.com/IBM/template-node-typescript,node-typescript \
+           https://github.com/IBM/template-java-spring,java-spring \
+           https://github.com/IBM/template-go-gin,go-gin \
+           https://github.com/IBM/template-quarkus,java-quarkus \
+           https://github.com/IBM/template-liberty,java-liberty \
+           https://github.com/cloud-native-toolkit/inventory-management-svc-solution,inventory-management-svc-solution \
+           https://github.com/cloud-native-toolkit/inventory-management-bff-solution,inventory-management-bff-solution \
+           https://github.com/cloud-native-toolkit/inventory-management-ui-solution,inventory-management-ui-solution \
+           https://github.com/ibm-cloud-architecture/appmod-liberty-toolkit,appmod-liberty-toolkit \
+           https://github.com/IBM/MAX-Object-Detector,ai-model-object-detector"
+
+
+for i in ${GIT_REPOS}; do
+IFS=","
+set $i
+echo "snapshot git repo $1 into $2"
+TMP_DIR=$(mktemp -d)
+pushd "${TMP_DIR}"
+
+response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/repos/${GIT_ORG}/$2")
+
+if [[ "${response}" == "200" ]]; then
+  echo "repo already exists ${GIT_HOST}/${GIT_ORG}/$2.git"
+  continue
+fi
+
+echo "Creating repo for ${GIT_HOST}/${GIT_ORG}/$2.git"
+curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"name\": \"${2}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
+
+git clone --depth 1 $1 repo
+cd repo
+rm -rf .git
+git init
+git config --local user.email "toolkit@cloudnativetoolkit.dev"
+git config --local user.name "IBM Cloud Native Toolkit"
+git add .
+git commit -m "initial commit"
+git tag 1.0.0
+git remote add downstream ${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/$2.git
+git push downstream master
+git push --tags downstream
+
+popd
+unset IFS
+done
+
+
 response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/repos/${GIT_ORG}/${GIT_REPO}")
 
 if [[ "${response}" != "200" ]]; then
@@ -64,16 +118,27 @@ for (( c=1; c<=PROJECT_COUNT; c++ )); do
           type: helm
 EOF
 done
-#userdemo
+
+
+for j in ${GIT_REPOS}; do
+IFS=","
+set $j
+echo "snapshot git repo $1 into $2"
+
+#userdemo app name app
   cat >> "${i}/values.yaml" <<EOF
     - targetRevision: master
       createNamespace: true
       targetNamespace: ${PROJECT_PREFIX}demo-${i}
       applications:
-        - name: ${i}-${PROJECT_PREFIX}demo-app
-          path: ${i}/${PROJECT_PREFIX}demo/app
+        - name: ${i}-${PROJECT_PREFIX}demo-${2}
+          path: ${i}/${PROJECT_PREFIX}demo/${2}
           type: helm
 EOF
+
+unset IFS
+done
+
 done
 
 git init
@@ -88,56 +153,3 @@ git push -u origin master
 popd
 
 fi #ends check if repo exits
-
-echo "creating code patterns"
-GIT_REPOS="https://github.com/IBM/template-go-gin,app \
-           https://github.com/IBM/template-node-react,node-react \
-           https://github.com/IBM/template-node-angular,node-angular \
-           https://github.com/IBM/template-graphql-typescript,graphql-typescript \
-           https://github.com/IBM/template-node-typescript,node-typescript \
-           https://github.com/IBM/template-java-spring,java-spring \
-           https://github.com/IBM/template-go-gin,go-gin \
-           https://github.com/IBM/template-quarkus,java-quarkus \
-           https://github.com/IBM/template-liberty,java-liberty \
-           https://github.com/ibm-garage-cloud/inventory-management-svc-solution,inventory-management-svc-solution \
-           https://github.com/ibm-garage-cloud/inventory-management-bff-solution,inventory-management-bff-solution \
-           https://github.com/ibm-garage-cloud/inventory-management-ui-solution,inventory-management-ui-solution \
-           https://github.com/ibm-cloud-architecture/appmod-liberty-toolkit,appmod-liberty-toolkit \
-           https://github.com/IBM/MAX-Object-Detector,ai-model-object-detector"
-
-
-for i in ${GIT_REPOS}; do
-IFS=","
-set $i
-echo "snapshot git repo $1 into $2"
-TMP_DIR=$(mktemp -d)
-pushd "${TMP_DIR}"
-
-response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/repos/${GIT_ORG}/$2")
-
-if [[ "${response}" == "200" ]]; then
-  echo "repo already exists ${GIT_HOST}/${GIT_ORG}/$2.git"
-  continue
-fi
-
-echo "Creating repo for ${GIT_HOST}/${GIT_ORG}/$2.git"
-curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"name\": \"${2}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
-
-git clone --depth 1 $1 repo
-cd repo
-rm -rf .git
-git init
-git config --local user.email "toolkit@cloudnativetoolkit.dev"
-git config --local user.name "IBM Cloud Native Toolkit"
-git add .
-git commit -m "initial commit"
-git tag 1.0.0
-git remote add downstream ${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/$2.git
-git push downstream master
-git push --tags downstream
-
-popd
-unset IFS
-done
-
-
