@@ -15,10 +15,10 @@ Instructions here https://cloudnativetoolkit.dev/workshop/setup
 | Deploy an Application using CI Pipelines with Tekton           | [Stable](https://cloudnativetoolkit.dev/workshop/ci)                     |
 | Promote an Application using CD with GitOps                    | [Stable](https://cloudnativetoolkit.dev/workshop/cd)                     |
 | Deploy a 3 tier Microservice using React, Node.js, and Java    | [Stable](https://cloudnativetoolkit.dev/workshop/inventory)              |
-| Deploy Operators using CICD and GitOps                         | [In Progress](https://github.com/ibm-garage-cloud/planning/issues/659)   |
+| Deploy Operators using CICD and GitOps                         | [In Progress](https://github.com/cloud-native-toolkit/planning/issues/659)   |
 | Application Modernization DevOps, Monolith to Container        | [Stable](https://cloudnativetoolkit.dev/workshop/appmod)                 |
-| DevOps for Cloud Pak for Integration (CP4I)                    | [Backlog](https://github.com/ibm-garage-cloud/planning/issues/661)       |
-| ODO and CodeReadyWorkSpaces Developer Workflows                | [Backlog](https://github.com/ibm-garage-cloud/planning/issues/662)       |
-| Observability and Security with OpenShift ServiceMesh (Istio)  | [Backlog](https://github.com/ibm-garage-cloud/planning/issues/663)       |
-| Event Driven Application using OpenShift Serverles (Knative)   | [Backlog](https://github.com/ibm-garage-cloud/planning/issues/664)       |
+| DevOps for Cloud Pak for Integration (CP4I)                    | [Backlog](https://github.com/cloud-native-toolkit/planning/issues/661)       |
+| ODO and CodeReadyWorkSpaces Developer Workflows                | [Backlog](https://github.com/cloud-native-toolkit/planning/issues/662)       |
+| Observability and Security with OpenShift ServiceMesh (Istio)  | [Backlog](https://github.com/cloud-native-toolkit/planning/issues/663)       |
+| Event Driven Application using OpenShift Serverles (Knative)   | [Backlog](https://github.com/cloud-native-toolkit/planning/issues/664)       |
 

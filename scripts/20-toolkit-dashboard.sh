@@ -19,9 +19,9 @@ GIT_REPOS="https://github.com/IBM/template-node-react,node-react \
            https://github.com/IBM/template-go-gin,go-gin \
            https://github.com/IBM/template-quarkus,java-quarkus \
            https://github.com/IBM/template-liberty,java-liberty \
-           https://github.com/ibm-garage-cloud/inventory-management-svc-solution,inventory-management-svc-solution \
-           https://github.com/ibm-garage-cloud/inventory-management-bff-solution,inventory-management-bff-solution \
-           https://github.com/ibm-garage-cloud/inventory-management-ui-solution,inventory-management-ui-solution \
+           https://github.com/cloud-native-toolkit/inventory-management-svc-solution,inventory-management-svc-solution \
+           https://github.com/cloud-native-toolkit/inventory-management-bff-solution,inventory-management-bff-solution \
+           https://github.com/cloud-native-toolkit/inventory-management-ui-solution,inventory-management-ui-solution \
            https://github.com/ibm-cloud-architecture/appmod-liberty-toolkit,appmod-liberty-toolkit \
            https://github.com/IBM/MAX-Object-Detector,ai-model-object-detector"
 
