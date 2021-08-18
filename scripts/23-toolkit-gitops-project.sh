@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
+TOOLKIT_GITOPS_NAMESPACE=${TOOLKIT_GITOPS_NAMESPACE:-openshift-gitops}
 TOOLKIT_GITOPS_APP=${TOOLKIT_GITOPS_APP:-toolkit}
 TOOLKIT_GITOPS_HOST=${TOOLKIT_GITOPS_HOST:-gogs.tools}
 TOOLKIT_GITOPS_PORT=${TOOLKIT_GITOPS_PORT:-3000}
@@ -19,10 +19,10 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: ${TOOLKIT_GITOPS_APP}-${i}
-  namespace: ${TOOLKIT_NAMESPACE}
+  namespace: ${TOOLKIT_GITOPS_NAMESPACE}
 spec:
   destination:
-    namespace: ${TOOLKIT_NAMESPACE}
+    namespace: ${TOOLKIT_GITOPS_NAMESPACE}
     server: 'https://kubernetes.default.svc'
   project: default
   source:

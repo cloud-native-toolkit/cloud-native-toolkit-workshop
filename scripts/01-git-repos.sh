@@ -95,7 +95,7 @@ description: Chart to configure ArgoCD with the {project-name} project and its a
 dependencies:
 - name: argocd-config
   version: 0.16.0
-  repository: https://ibm-garage-cloud.github.io/toolkit-charts
+  repository: https://charts.cloudnativetoolkit.dev
 EOF
 cat > "${i}/values.yaml" <<EOF
 global: {}
