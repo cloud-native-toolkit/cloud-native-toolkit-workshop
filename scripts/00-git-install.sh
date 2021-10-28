@@ -21,7 +21,7 @@ else
   count=0
   until kubectl get deployment "${DEPLOYMENT}" -n "${OPERATOR_NAMESPACE}" 1> /dev/null 2> /dev/null ;
   do
-    if [[ ${count} -eq 24 ]]; then
+    if [[ ${count} -eq 50 ]]; then
       echo "Timed out waiting for deployment/${DEPLOYMENT} in ${OPERATOR_NAMESPACE} to start"
       kubectl get deployment "${DEPLOYMENT}" -n "${OPERATOR_NAMESPACE}" 
       exit 1
@@ -29,7 +29,7 @@ else
       count=$((count + 1))
     fi
 
-    echo "Waiting for deployment/${DEPLOYMENT} in ${OPERATOR_NAMESPACE} to start"
+    echo "${count} Waiting for deployment/${DEPLOYMENT} in ${OPERATOR_NAMESPACE} to start"
     sleep 10
   done
 
@@ -40,7 +40,7 @@ else
   # Wait for Pods
   count=0
   while kubectl get pods -o jsonpath='{range .items[*]}{.status.phase}{"\n"}{end}' -n "${OPERATOR_NAMESPACE}" | grep -q Pending; do
-    if [[ ${count} -eq 24 ]]; then
+    if [[ ${count} -eq 50 ]]; then
       echo "Timed out waiting for pods in ${OPERATOR_NAMESPACE} to start"
       kubectl get pods -n "${OPERATOR_NAMESPACE}"
       exit 1
@@ -48,28 +48,96 @@ else
       count=$((count + 1))
     fi
 
-    echo "Waiting for all pods in ${NAMESPACE} to start"
+    echo "${count} Waiting for all pods in ${NAMESPACE} to start"
     sleep 10
   done
 fi
 
 
-status=$(oc get pods -n ${TOOLKIT_NAMESPACE} -l app=gitea-tools 2> /dev/null)
+status=$(oc get pods -n ${TOOLKIT_NAMESPACE} -l app=${INSTANCE_NAME} 2> /dev/null)
 if [[ "$status" =~ "Running" ]]; then
   echo "Gitea server already installed"
 else
   echo "Install Gitea server"
+  TMP_DIR=$(mktemp -d)
+  pushd "${TMP_DIR}"
+cat > "values.yaml" <<EOF
+global: {}
+giteaInstance:
+  name: ${INSTANCE_NAME}
+  namespace: ${TOOLKIT_NAMESPACE}
+  giteaAdminUser: toolkit
+  giteaAdminPassword: toolkit
+EOF
+  helm template ${INSTANCE_NAME} gitea-instance --repo "https://lsteck.github.io/toolkit-charts" --values "values.yaml" | kubectl apply --validate=false -f -
 
-fi
+  popd
+
+  PODS="name=postgresql-${INSTANCE_NAME},app=${INSTANCE_NAME}"
+  ROUTES="${INSTANCE_NAME}"
+  IFS=","
+
+  for POD in ${PODS}; do
+
+    count=0
+    until [ $(kubectl get pods -l "${POD}" -n "${TOOLKIT_NAMESPACE}" 2> /dev/null | wc -l) -gt 0 ];
+    do
+      if [[ ${count} -eq 50 ]]; then
+        echo "Timed out waiting for pod -l ${POD} in ${TOOLKIT_NAMESPACE} to be created"
+        kubectl get pods -l "${POD}" -n "${TOOLKIT_NAMESPACE}" 
+        exit 1
+      else
+        count=$((count + 1))
+      fi
+
+      echo "${count} Waiting for pod -l ${POD} in ${TOOLKIT_NAMESPACE} to be created"
+      sleep 10
+    done
+
+    until kubectl get pods -l "${POD}" -n "${TOOLKIT_NAMESPACE}" -o jsonpath="{.items[0]['status.phase']}" | grep -q Running;
+    do
+      if [[ ${count} -eq 50 ]]; then
+        echo "Timed out waiting for pod -l ${POD} in ${TOOLKIT_NAMESPACE} to be running"
+        kubectl get pods -l "${POD}"  -n "${TOOLKIT_NAMESPACE}" 
+        exit 1
+      else
+        count=$((count + 1))
+      fi
+
+      echo "${count} Waiting for pod -l ${POD} in ${TOOLKIT_NAMESPACE} to be running"
+      sleep 10
+    done
+
+  done
+
+
+  for ROUTE in ${ROUTES}; do
+    count=0
+    until kubectl get route "${ROUTE}" -n "${TOOLKIT_NAMESPACE}" 1> /dev/null 2> /dev/null ;
+    do
+      if [[ ${count} -eq 50 ]]; then
+        echo "Timed out waiting for route/${ROUTE} in ${TOOLKIT_NAMESPACE} to be created"
+        kubectl get route "${ROUTE}" -n "${TOOLKIT_NAMESPACE}" 
+        exit 1
+      else
+        count=$((count + 1))
+      fi
+
+      echo "${count} Waiting for route/${ROUTE} in ${TOOLKIT_NAMESPACE} to be created"
+      sleep 10
+    done
+  done
+
+
+
+fi # else Install Gitea server
 
 
 echo "Checking for toolkit admin account"
 # Create toolkit admin user if needed.
 #GIT_CRED_USERNAME
-admin_user=$(oc get secret gitea-tools-access -n tools -o go-template --template="{{.data.username|base64decode}}")
-echo ${admin_user}
-echo ${GIT_CRED_USERNAME}
-if [${GIT_CRED_USERNAME} == ${admin_user}]; then
+admin_user=$(oc get secret ${INSTANCE_NAME}-access -n ${TOOLKIT_NAMESPACE} -o go-template --template="{{.data.username|base64decode}}")
+if [[ ${GIT_CRED_USERNAME} == ${admin_user} ]]; then
   echo "toolkit admin account exists"
 else
   echo "Creating toolkit admin account"
