@@ -142,7 +142,7 @@ if [[ ${GIT_CRED_USERNAME} == ${ADMIN_USER} ]]; then
 else
   echo "Creating toolkit admin account"
   ADMIN_PASSWORD=$(oc get secret ${INSTANCE_NAME}-access -n ${TOOLKIT_NAMESPACE} -o go-template --template="{{.data.password|base64decode}}")
-  GIT_HOST=$(oc get route gitea-tools -o jsonpath='{.spec.host}')
+  GIT_HOST=$(oc get route ${INSTANCE_NAME} -o jsonpath='{.spec.host}')
   # Add toolkit admin user
   curl -s -X POST -H "Content-Type: application/json" -d "{ \"username\": \"${GIT_CRED_USERNAME}\",   \"password\": \"${GIT_CRED_PASSWORD}\",   \"email\": \"${GIT_CRED_USERNAME}@example.com\", \"must_change_password\": false }" "https://${ADMIN_USER}:${ADMIN_PASSWORD}@${GIT_HOST}/api/v1/admin/users" > /dev/null
   # Make toolkit admin user an admin
