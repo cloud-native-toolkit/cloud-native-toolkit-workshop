@@ -144,9 +144,9 @@ else
   ADMIN_PASSWORD=$(oc get secret ${INSTANCE_NAME}-access -n ${TOOLKIT_NAMESPACE} -o go-template --template="{{.data.password|base64decode}}")
   GIT_HOST=$(oc get route ${INSTANCE_NAME} -n ${TOOLKIT_NAMESPACE} -o jsonpath='{.spec.host}')
   # Add toolkit admin user
-  curl -s -X POST -H "Content-Type: application/json" -d "{ \"username\": \"${GIT_CRED_USERNAME}\",   \"password\": \"${GIT_CRED_PASSWORD}\",   \"email\": \"${GIT_CRED_USERNAME}@example.com\", \"must_change_password\": false }" "https://${ADMIN_USER}:${ADMIN_PASSWORD}@${GIT_HOST}/api/v1/admin/users" > /dev/null
+  curl -s -X POST -H "Content-Type: application/json" -d "{ \"username\": \"${GIT_CRED_USERNAME}\",   \"password\": \"${GIT_CRED_PASSWORD}\",   \"email\": \"${GIT_CRED_USERNAME}@cloudnativetoolkit.dev\", \"must_change_password\": false }" "https://${ADMIN_USER}:${ADMIN_PASSWORD}@${GIT_HOST}/api/v1/admin/users" > /dev/null
   # Make toolkit admin user an admin
-  curl -s -X PATCH -H "accept: application/json" -H "Content-Type: application/json" -d "{ \"login_name\": \"${GIT_CRED_USERNAME}\", \"email\": \"${GIT_CRED_USERNAME}@example.com\", \"active\": true, \"admin\": true, \"allow_create_organization\": true, \"allow_git_hook\": true, \"allow_import_local\": true, \"visibility\": \"public\"}" "https://${ADMIN_USER}:${ADMIN_PASSWORD}@${GIT_HOST}/api/v1/admin/users/${GIT_CRED_USERNAME}" > /dev/null
+  curl -s -X PATCH -H "accept: application/json" -H "Content-Type: application/json" -d "{ \"login_name\": \"${GIT_CRED_USERNAME}\", \"email\": \"${GIT_CRED_USERNAME}@cloudnativetoolkit.dev\", \"active\": true, \"admin\": true, \"allow_create_organization\": true, \"allow_git_hook\": true, \"allow_import_local\": true, \"visibility\": \"public\"}" "https://${ADMIN_USER}:${ADMIN_PASSWORD}@${GIT_HOST}/api/v1/admin/users/${GIT_CRED_USERNAME}" > /dev/null
 
 fi
 
