@@ -2,20 +2,20 @@
 
 set -euo pipefail
 
+INSTANCE_NAME="gitea-tools"
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
-GIT_PROTOCOL=${GIT_PROTOCOL:-http}
-GIT_HOST=$(oc get route -n ${TOOLKIT_NAMESPACE} gogs --template='{{.spec.host}}')
-GIT_URL="${GIT_PROTOCOL}://${GIT_HOST}"
-GIT_ORG=${GIT_ORG:-toolkit}
-GIT_REPO=${GIT_REPO:-gitops}
 TOOLKIT_GITOPS_PATH_QA=${TOOLKIT_GITOPS_PATH_QA:-qa}
 TOOLKIT_GITOPS_PATH_STAGING=${TOOLKIT_GITOPS_PATH_STAGING:-staging}
 PROJECT_COUNT=${PROJECT_COUNT:-15}
 PROJECT_PREFIX=${PROJECT_PREFIX:-project}
 GIT_CRED_USERNAME=${GIT_CRED_USERNAME:-toolkit}
 GIT_CRED_PASSWORD=${GIT_CRED_PASSWORD:-toolkit}
+GIT_PROTOCOL=${GIT_PROTOCOL:-https}
+GIT_HOST=$(oc get route ${INSTANCE_NAME} -n ${TOOLKIT_NAMESPACE} -o jsonpath='{.spec.host}')
+GIT_URL="${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}"
+GIT_ORG=${GIT_ORG:-toolkit}
+GIT_REPO=${GIT_REPO:-gitops}
 GIT_GITOPS_URL="${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/${GIT_REPO}.git"
-ACCESS_TOKEN=$(curl -s -u "${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}" "${GIT_URL}/api/v1/users/${GIT_CRED_USERNAME}/tokens" | jq -r '.[0].sha1')
 
 
 
@@ -42,16 +42,14 @@ set $i
 echo "snapshot git repo $1 into $2"
 TMP_DIR=$(mktemp -d)
 pushd "${TMP_DIR}"
-
-response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/repos/${GIT_ORG}/$2")
-
+response=$(curl --write-out '%{http_code}' --silent --output /dev/null "${GIT_URL}/api/v1/repos/${GIT_ORG}/$2")
 if [[ "${response}" == "200" ]]; then
   echo "repo already exists ${GIT_HOST}/${GIT_ORG}/$2.git"
   continue
 fi
 
 echo "Creating repo for ${GIT_HOST}/${GIT_ORG}/$2.git"
-curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"name\": \"${2}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
+curl -X POST -H "Content-Type: application/json" -d "{ \"name\": \"${2}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
 
 git clone --depth 1 $1 repo
 cd repo
@@ -62,21 +60,21 @@ git config --local user.name "IBM Cloud Native Toolkit"
 git add .
 git commit -m "initial commit"
 git tag 1.0.0
-git remote add downstream ${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/$2.git
-git push downstream master
+git remote add downstream ${GIT_URL}/${GIT_ORG}/$2.git
+git push downstream main
 git push --tags downstream
 
 popd
 unset IFS
 done
+unset IFS
 
-
-response=$(curl --write-out '%{http_code}' --silent --output /dev/null -H "Authorization: token ${ACCESS_TOKEN}" "${GIT_URL}/api/v1/repos/${GIT_ORG}/${GIT_REPO}")
+response=$(curl --write-out '%{http_code}' --silent --output /dev/null "${GIT_URL}/api/v1/repos/${GIT_ORG}/${GIT_REPO}")
 
 if [[ "${response}" != "200" ]]; then
 
 echo "creating gitops repo ${GIT_ORG}/${GIT_REPO}.git"
-curl -X POST -H "Authorization: token ${ACCESS_TOKEN}" -H "Content-Type: application/json" -d "{ \"name\": \"${GIT_REPO}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
+curl -X POST -H "Content-Type: application/json" -d "{ \"name\": \"${GIT_REPO}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
 
 
 TMP_DIR=$(mktemp -d)
@@ -100,7 +98,7 @@ EOF
 cat > "${i}/values.yaml" <<EOF
 global: {}
 argocd-config:
-  repoUrl: "http://gogs.tools:3000/toolkit/gitops.git"
+  repoUrl: "${GIT_PROTOCOL}://${GIT_HOST}/${GIT_ORG}/${GIT_REPO}.git"
   project: toolkit-${i}
   applicationTargets:
 EOF
@@ -109,7 +107,7 @@ for (( c=1; c<=PROJECT_COUNT; c++ )); do
   printf -v id "%02g" ${c}
 
   cat >> "${i}/values.yaml" <<EOF
-    - targetRevision: master
+    - targetRevision: main
       createNamespace: true
       targetNamespace: ${PROJECT_PREFIX}${id}-${i}
       applications:
@@ -123,11 +121,12 @@ done
 for j in ${GIT_REPOS}; do
 IFS=","
 set $j
+echo $j
 echo "snapshot git repo $1 into $2"
 
 #userdemo app name app
   cat >> "${i}/values.yaml" <<EOF
-    - targetRevision: master
+    - targetRevision: main
       createNamespace: true
       targetNamespace: ${PROJECT_PREFIX}demo-${i}
       applications:
@@ -148,7 +147,7 @@ echo "Edit [qa/value.yaml](./qa/value.yaml) or [staging/value.yaml](./staging/va
 git add .
 git commit -m "first commit"
 git remote add origin ${GIT_GITOPS_URL}
-git push -u origin master
+git push -u origin main
 
 popd
 
