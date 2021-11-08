@@ -66,10 +66,11 @@ global: {}
 giteaInstance:
   name: ${INSTANCE_NAME}
   namespace: ${TOOLKIT_NAMESPACE}
-  giteaAdminUser: toolkit
-  giteaAdminPassword: toolkit
+  giteaAdminUser: ${GIT_CRED_USERNAME}
+  giteaAdminPassword: ${GIT_CRED_PASSWORD}
+  giteaAdminEmail: ${GIT_CRED_USERNAME}@cloudnativetoolkit.dev
 EOF
-  helm template ${INSTANCE_NAME} gitea-instance --repo "https://lsteck.github.io/toolkit-charts" --values "values.yaml" | kubectl apply --validate=false -f -
+  helm template ${INSTANCE_NAME} gitea-instance --repo "https://charts.cloudnativetoolkit.dev" --values "values.yaml" | kubectl apply --validate=false -f -
 
   popd
 
