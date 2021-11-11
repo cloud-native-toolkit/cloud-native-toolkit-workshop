@@ -4,7 +4,8 @@ set -euo pipefail
 
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 GIT_PROTOCOL="https"
-GIT_HOST=$(oc get route -n ${TOOLKIT_NAMESPACE} gogs --template='{{.spec.host}}')
+INSTANCE_NAME=${INSTANCE_NAME:-gitea-tools}
+GIT_HOST=$(oc get route ${INSTANCE_NAME} -n ${TOOLKIT_NAMESPACE} -o jsonpath='{.spec.host}')
 GIT_ORG=${GIT_ORG:-toolkit}
 GIT_REPO=${GIT_REPO:-gitops}
 GIT_URL="${GIT_PROTOCOL}://${GIT_HOST}"
