@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-INSTANCE_NAME="gitea-tools"
+INSTANCE_NAME=${INSTANCE_NAME:-gitea-tools}
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 TOOLKIT_GITOPS_PATH_QA=${TOOLKIT_GITOPS_PATH_QA:-qa}
 TOOLKIT_GITOPS_PATH_STAGING=${TOOLKIT_GITOPS_PATH_STAGING:-staging}
@@ -98,7 +98,7 @@ EOF
 cat > "${i}/values.yaml" <<EOF
 global: {}
 argocd-config:
-  repoUrl: "${GIT_PROTOCOL}://${GIT_HOST}/${GIT_ORG}/${GIT_REPO}.git"
+  repoUrl: "http://${INSTANCE_NAME}.${TOOLKIT_NAMESPACE}:3000/toolkit/gitops.git"
   project: toolkit-${i}
   applicationTargets:
 EOF
