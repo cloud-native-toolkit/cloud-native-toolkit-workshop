@@ -2,11 +2,12 @@
 
 set -euo pipefail
 
+INSTANCE_NAME=${INSTANCE_NAME:-gitea-tools}
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 TOOLKIT_DASHBOARD_CONFIG=${TOOLKIT_DASHBOARD_CONFIG:-developer-dashboard-config}
 TOOLKIT_DASHBOARD_DEPLOY=${TOOLKIT_DASHBOARD_DEPLOY:-dashboard-developer-dashboard}
-GIT_PROTOCOL=${GIT_PROTOCOL:-http}
-GIT_HOST=$(oc get route -n ${TOOLKIT_NAMESPACE} gogs --template='{{.spec.host}}')
+GIT_PROTOCOL=${GIT_PROTOCOL:-https}
+GIT_HOST=$(oc get route ${INSTANCE_NAME} -n ${TOOLKIT_NAMESPACE} -o jsonpath='{.spec.host}')
 GIT_URL="${GIT_PROTOCOL}://${GIT_HOST}"
 GIT_USER=${GIT_USER:-toolkit}
 ORGINAL_JSON_URL=${ORGINAL_JSON_URL:-https://raw.githubusercontent.com/cloud-native-toolkit/developer-dashboard/main/public/data/links.json}
