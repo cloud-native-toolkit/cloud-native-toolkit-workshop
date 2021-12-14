@@ -9,7 +9,7 @@ GIT_CRED_PASSWORD=${GIT_CRED_PASSWORD:-toolkit}
 OPERATOR_NAME="gitea-operator"
 OPERATOR_NAMESPACE="openshift-operators"
 DEPLOYMENT="${OPERATOR_NAME}-controller-manager"
-INSTANCE_NAME=${INSTANCE_NAME:-gitea-tools}
+INSTANCE_NAME=${INSTANCE_NAME:-gitea}
 
 if [[ $(oc get subscription ${OPERATOR_NAME} -n ${OPERATOR_NAMESPACE} 2> /dev/null) ]]; then
   echo "Gitea operator already installed"

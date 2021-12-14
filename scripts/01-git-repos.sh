@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-INSTANCE_NAME=${INSTANCE_NAME:-gitea-tools}
+INSTANCE_NAME=${INSTANCE_NAME:-gitea}
 TOOLKIT_NAMESPACE=${TOOLKIT_NAMESPACE:-tools}
 TOOLKIT_GITOPS_PATH_QA=${TOOLKIT_GITOPS_PATH_QA:-qa}
 TOOLKIT_GITOPS_PATH_STAGING=${TOOLKIT_GITOPS_PATH_STAGING:-staging}
@@ -15,6 +15,7 @@ GIT_HOST=$(oc get route ${INSTANCE_NAME} -n ${TOOLKIT_NAMESPACE} -o jsonpath='{.
 GIT_URL="${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}"
 GIT_ORG=${GIT_ORG:-toolkit}
 GIT_REPO=${GIT_REPO:-gitops}
+GIT_BRANCH=${GIT_BRANCH:-main}
 GIT_GITOPS_URL="${GIT_PROTOCOL}://${GIT_CRED_USERNAME}:${GIT_CRED_PASSWORD}@${GIT_HOST}/${GIT_ORG}/${GIT_REPO}.git"
 
 
@@ -49,7 +50,7 @@ if [[ "${response}" == "200" ]]; then
 fi
 
 echo "Creating repo for ${GIT_HOST}/${GIT_ORG}/$2.git"
-curl -X POST -H "Content-Type: application/json" -d "{ \"name\": \"${2}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
+curl -X POST -H "Content-Type: application/json" -d "{ \"name\": \"${2}\", \"default_branch\": \"${GIT_BRANCH}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
 
 git clone --depth 1 $1 repo
 cd repo
@@ -61,7 +62,7 @@ git add .
 git commit -m "initial commit"
 git tag 1.0.0
 git remote add downstream ${GIT_URL}/${GIT_ORG}/$2.git
-git push downstream main
+git push downstream ${GIT_BRANCH}
 git push --tags downstream
 
 popd
@@ -74,7 +75,7 @@ response=$(curl --write-out '%{http_code}' --silent --output /dev/null "${GIT_UR
 if [[ "${response}" != "200" ]]; then
 
 echo "creating gitops repo ${GIT_ORG}/${GIT_REPO}.git"
-curl -X POST -H "Content-Type: application/json" -d "{ \"name\": \"${GIT_REPO}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
+curl -X POST -H "Content-Type: application/json" -d "{ \"name\": \"${GIT_REPO}\", \"default_branch\": \"${GIT_BRANCH}\" }" "${GIT_URL}/api/v1/admin/users/${GIT_ORG}/repos"
 
 
 TMP_DIR=$(mktemp -d)
@@ -107,7 +108,7 @@ for (( c=1; c<=PROJECT_COUNT; c++ )); do
   printf -v id "%02g" ${c}
 
   cat >> "${i}/values.yaml" <<EOF
-    - targetRevision: main
+    - targetRevision: ${GIT_BRANCH}
       createNamespace: true
       targetNamespace: ${PROJECT_PREFIX}${id}-${i}
       applications:
@@ -126,7 +127,7 @@ echo "snapshot git repo $1 into $2"
 
 #userdemo app name app
   cat >> "${i}/values.yaml" <<EOF
-    - targetRevision: main
+    - targetRevision: ${GIT_BRANCH}
       createNamespace: true
       targetNamespace: ${PROJECT_PREFIX}demo-${i}
       applications:
@@ -147,7 +148,7 @@ echo "Edit [qa/value.yaml](./qa/value.yaml) or [staging/value.yaml](./staging/va
 git add .
 git commit -m "first commit"
 git remote add origin ${GIT_GITOPS_URL}
-git push -u origin main
+git push -u origin ${GIT_BRANCH}
 
 popd
 
