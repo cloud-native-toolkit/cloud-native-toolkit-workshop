@@ -4,6 +4,7 @@ set -euo pipefail
 
 INSTALL_BRANCH=${INSTALL_BRANCH:-main}
 INSTALL_REPO=${INSTALL_REPO:-cloud-native-toolkit/cloud-native-toolkit-workshop}
+export TOOLKIT_GROUP=${TOOLKIT_GROUP:-ibm-toolkit-users}
 
 # Run this script like this "curl -sfL workshop.cloudnativetoolkit.dev | sh -"
 
@@ -14,6 +15,7 @@ INSTALL_SCRIPTS="00-git-install.sh \
                  10-ocp-users.sh \
                  11-ocp-group-argocd.sh \
                  12-ocp-group-toolkit.sh \
+                 13-ocp-group-rbac.sh \
                  20-toolkit-dashboard.sh \
                  21-toolkit-gitops-cm.sh \
                  22-toolkit-gitops-secret.sh \
