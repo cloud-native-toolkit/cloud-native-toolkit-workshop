@@ -26,6 +26,7 @@ jobs:
           mkdir -p public
           cp scripts/install.sh public
           cp scripts/install.sh public/index.html
+          cp CNAME public
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
